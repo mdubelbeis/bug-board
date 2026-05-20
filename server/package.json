@@ -1,8 +1,9 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "description": "",
+  "description": "Backend API for Bug Board Full Stack Application",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "dev": "nodemon src/server.js",
     "start": "node src/server.js"
