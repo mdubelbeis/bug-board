@@ -14,6 +14,7 @@ const userSchema = new mongoose.Schema(
       trim: true,
       unique: true,
     },
+    // TODO: test 'select: false' to remove password on resp obj.
     password: {
       type: String,
       required: [true, 'A password is required'],

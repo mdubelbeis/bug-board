@@ -19,6 +19,8 @@ if (environment === 'development') {
 app.use('/api/v1/comments', commentRouter);
 app.use('/api/v1/bugs', bugRouter);
 app.use('/api/v1/projects', projectRouter);
+
+// TODO: Implement auth routing: /api/v1/auth/users?
 app.use('/api/v1/users', userRouter);
 
 app.get('/api/health', (req, res) => {

@@ -1,12 +1,21 @@
 import express from 'express';
-import { getAllUsers } from '../controllers/userController.js';
+
+// TODO: Implement auth routing
+
+import {
+  createUser,
+  deleteUser,
+  findUser,
+  getAllUsers,
+  updateUser,
+} from '../controllers/userController.js';
 
 // Import controller functions from controllers/userController.js
 
 const router = express.Router();
 
 // ROUTES CONFIG
-router.route('/').get(getAllUsers);
-router.route('/:id');
+router.route('/').get(getAllUsers).post(createUser);
+router.route('/:id').get(findUser).patch(updateUser).delete(deleteUser);
 
 export default router;
