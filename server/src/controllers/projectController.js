@@ -39,11 +39,13 @@ export const findProject = async (req, res) => {
 
 export const createProject = async (req, res) => {
   try {
-    // await Project.insertOne(req.body);
+    const project = await Project.insertOne(req.body);
 
     res.status(201).json({
       status: 'success',
-      message: 'Project created',
+      data: {
+        project,
+      },
     });
   } catch (err) {
     res.status(400).json({
@@ -80,14 +82,15 @@ export const updateProject = async (req, res) => {
 
 export const deleteProject = async (req, res) => {
   try {
-    const deletedProject = Project.findByIdAndDelete(req.params.id);
+    const project = await Project.findByIdAndDelete(req.params.id);
 
     res.status(200).json({
       status: 'success',
-      message: `Deleted tour: ${req.params.id}`,
-      deleteProject,
+      data: {
+        project,
+      },
     });
-  } catch (error) {
+  } catch (err) {
     res.status(400).json({
       status: 'fail',
       message: err.message,

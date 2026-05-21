@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 
+// TODO: Exclude "__v" from response
 const userSchema = new mongoose.Schema(
   {
     name: {
@@ -7,6 +8,7 @@ const userSchema = new mongoose.Schema(
       required: [true, 'A name is required'],
       trim: true,
     },
+    // TODO: Validate that "@" is in email
     email: {
       type: String,
       lowercase: true,
@@ -14,11 +16,12 @@ const userSchema = new mongoose.Schema(
       trim: true,
       unique: true,
     },
-    // TODO: test 'select: false' to remove password on resp obj.
+    // TODO: Configure further validation on password (no special chars, etc.)
     password: {
       type: String,
       required: [true, 'A password is required'],
       minLength: [8, 'Password min length: 8'],
+      select: false,
     },
   },
   { timestamps: true }

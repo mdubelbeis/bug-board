@@ -1,7 +1,6 @@
 import User from '../models/userModel.js';
 
 // TODO: REDO WITH Controller with /api/auth
-// TODO: Ensure password is not sent back in response ('select: false' - on schema)
 
 export const getAllUsers = async (req, res) => {
   try {
@@ -22,9 +21,10 @@ export const getAllUsers = async (req, res) => {
 };
 
 export const createUser = async (req, res) => {
-  // TODO: Implement bcrypt on password
+  // TODO: Implement bcrypt on password?
   try {
-    const user = User.insertOne(req.body);
+    const user = await User.insertOne(req.body);
+    user.password = undefined;
 
     res.status(201).json({
       status: 'success',
@@ -47,7 +47,7 @@ export const findUser = async (req, res) => {
     res.status(200).json({
       status: 'success',
       data: {
-        data,
+        user,
       },
     });
   } catch (err) {

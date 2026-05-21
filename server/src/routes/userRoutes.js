@@ -10,8 +10,6 @@ import {
   updateUser,
 } from '../controllers/userController.js';
 
-// Import controller functions from controllers/userController.js
-
 const router = express.Router();
 
 // ROUTES CONFIG
