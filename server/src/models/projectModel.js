@@ -13,8 +13,9 @@ const projectSchema = new mongoose.Schema(
       required: [true, 'A description is required'],
     },
     owner: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+      // type: mongoose.Schema.Types.ObjectId,
+      // ref: 'User',
+      type: String,
       required: true,
     },
   },
