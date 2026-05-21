@@ -1,12 +1,11 @@
 import dotenv from 'dotenv';
-import express from 'express';
 import mongoose from 'mongoose';
-
 dotenv.config();
-const app = express();
+
+import app from './app.js';
+
 const PORT = process.env.PORT || 8000;
 
-// Database connection
 const DB_CLOUD = process.env.DB_CLOUD;
 const DB_LOCAL = process.env.DB_LOCAL;
 
