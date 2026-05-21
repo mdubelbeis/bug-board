@@ -2,7 +2,7 @@ import express from 'express';
 import {
   createComment,
   deleteComment,
-  findCommentById,
+  findComment,
   getAllComments,
   updateComment,
 } from '../controllers/commentController.js';
@@ -12,7 +12,7 @@ const router = express.Router();
 router.route('/').get(getAllComments).post(createComment);
 router
   .route('/:id')
-  .get(findCommentById)
+  .get(findComment)
   .delete(deleteComment)
   .patch(updateComment);
 

@@ -31,7 +31,7 @@ export const createComment = async (req, res) => {
   }
 };
 
-export const findCommentById = async (req, res) => {
+export const findComment = async (req, res) => {
   try {
     const comment = await Comment.findById(req.params.id);
 

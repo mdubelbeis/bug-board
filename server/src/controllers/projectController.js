@@ -19,7 +19,7 @@ export const getAllProjects = async (req, res) => {
   }
 };
 
-export const getProjectById = async (req, res) => {
+export const findProject = async (req, res) => {
   try {
     const project = await Project.findById(req.params.id);
 
