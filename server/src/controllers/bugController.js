@@ -1,94 +1,76 @@
 import Bug from '../models/bugModel.js';
 
 export const getAllBugs = async (req, res) => {
-  try {
-    const bugs = await Bug.find();
+  const bugs = await Bug.find();
 
-    res.status(200).json({
-      status: 'success',
-      data: {
-        bugs,
-      },
-    });
-  } catch (err) {
-    res.status(400).json({
-      status: 'fail',
-      message: err.message,
-    });
-  }
+  res.status(200).json({
+    status: 'success',
+    count: bugs.length,
+    data: {
+      bugs,
+    },
+  });
 };
 
 export const createBug = async (req, res) => {
-  try {
-    const bug = await Bug.insertOne(req.body);
+  const bug = await Bug.create(req.body);
 
-    res.status(201).json({
-      status: 'success',
-      data: {
-        bug,
-      },
-    });
-  } catch (err) {
-    res.status(400).json({
-      status: 'fail',
-      message: err.message,
-    });
-  }
+  res.status(201).json({
+    status: 'success',
+    data: {
+      bug,
+    },
+  });
 };
 
-export const updateBug = async (req, res) => {
-  try {
-    const bug = await Bug.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true,
-    });
+export const findBug = async (req, res, next) => {
+  const bug = await Bug.findById(req.params.id);
 
-    res.status(200).json({
-      status: 'success',
-      data: {
-        bug,
-      },
-    });
-  } catch (err) {
-    res.status(400).json({
-      status: 'fail',
-      message: err.message,
-    });
+  if (!bug) {
+    const err = new Error('Bug not found');
+    err.statusCode = 404;
+    err.status = 'fail';
+    return next(err);
   }
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      bug,
+    },
+  });
 };
 
-export const findBug = async (req, res) => {
-  try {
-    const bug = await Bug.findById(req.params.id);
+export const updateBug = async (req, res, next) => {
+  const bug = await Bug.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true,
+  });
 
-    res.status(200).json({
-      status: 'success',
-      data: {
-        bug,
-      },
-    });
-  } catch (err) {
-    res.status(400).json({
-      status: 'fail',
-      message: err.message,
-    });
+  if (!bug) {
+    const err = new Error('Bug not found');
+    err.statusCode = 404;
+    err.status = 'fail';
+    return next(err);
   }
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      bug,
+    },
+  });
 };
 
-export const deleteBug = async (req, res) => {
-  try {
-    const bug = await Bug.findByIdAndDelete(req.params.id);
+export const deleteBug = async (req, res, next) => {
+  const bug = await Bug.findByIdAndDelete(req.params.id);
 
-    res.status(200).json({
-      status: 'success',
-      data: {
-        bug,
-      },
-    });
-  } catch (err) {
-    res.status(400).json({
-      status: 'fail',
-      message: err.message,
-    });
+  if (!bug) {
+    const err = new Error('Bug not found');
+    err.statusCode = 404;
+    err.status = 'fail';
+    return next(err);
   }
+
+  res.status(204).send();
 };
