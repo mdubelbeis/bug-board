@@ -8,6 +8,24 @@ This project is currently in early development.
 
 Build a portfolio-ready full-stack application for tracking software bugs across projects.
 
+## Project Planning
+
+View the project board here:
+[Bug Board Project](https://github.com/users/mdubelbeis/projects/6/views/1)
+
+Bug-Board is being developed using a public GitHub Project board to track feature work, backend milestones, user stories, and future frontend/deployment tasks.
+
+The board includes planned work for:
+
+- Backend API foundation
+- CRUD resources
+- Error handling
+- Nested routes
+- Authentication
+- Authorization
+- Frontend implementation
+- Deployment
+
 ## Planned Features
 
 - User authentication
