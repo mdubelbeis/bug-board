@@ -23,9 +23,9 @@ app.use('/api/v1/projects', projectRouter);
 // TODO: Implement auth routing: /api/v1/auth/users?
 app.use('/api/v1/users', userRouter);
 
-app.get('/api/health', (req, res) => {
+app.get('/api/v1/health', (req, res) => {
   res.status(200).json({
-    status: 'ok',
+    status: 'success',
     message: 'Bug-Board API is running',
   });
 });

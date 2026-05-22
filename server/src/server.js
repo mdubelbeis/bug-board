@@ -12,10 +12,10 @@ const DB_LOCAL = process.env.DB_LOCAL;
 mongoose
   .connect(DB_LOCAL)
   .then((conn) => {
-    console.log('DB CONNECTED...');
+    console.log('Successful database connection');
   })
   .catch((err) => {
-    console.error(`DB CONNECTION FAILED: ${err.message}`);
+    console.error(`Failed database connection: ${err.message}`);
   });
 
 app.listen(PORT, () => {
