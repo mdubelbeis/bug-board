@@ -1,20 +1,18 @@
 import express from 'express';
 import morgan from 'morgan';
-
-const app = express();
-const environment = process.env.ENVIRONMENT;
-
 import bugRouter from './routes/bugRoutes.js';
 import commentRouter from './routes/commentRoutes.js';
 import projectRouter from './routes/projectRoutes.js';
 import userRouter from './routes/userRoutes.js';
 
-// MIDDLEWARE
+const app = express();
 app.use(express.json());
 
-if (environment === 'development') {
+if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
+console.log('NODE_ENV in app.js:', process.env.NODE_ENV);
+// MIDDLEWARE
 
 app.use('/api/v1/comments', commentRouter);
 app.use('/api/v1/bugs', bugRouter);
