@@ -6,13 +6,14 @@ import projectRouter from './routes/projectRoutes.js';
 import userRouter from './routes/userRoutes.js';
 
 const app = express();
-app.use(express.json());
 
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
-console.log('NODE_ENV in app.js:', process.env.NODE_ENV);
-// MIDDLEWARE
+
+app.use(express.json());
+
+// Middleware
 
 app.use('/api/v1/comments', commentRouter);
 app.use('/api/v1/bugs', bugRouter);
@@ -26,6 +27,13 @@ app.get('/api/v1/health', (req, res) => {
     status: 'success',
     message: 'Bug-Board API is running',
   });
+});
+
+app.use((err, req, res, next) => {
+  console.log('Hit the error handler');
+  console.error(err.stack);
+
+  res.status(500).send('Something broke!');
 });
 
 export default app;
