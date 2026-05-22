@@ -10,7 +10,12 @@ export const getAllComments = async (req, res) => {
         comments,
       },
     });
-  } catch (err) {}
+  } catch (err) {
+    res.status(404).json({
+      status: 'fail',
+      message: err.message,
+    });
+  }
 };
 
 export const createComment = async (req, res) => {
