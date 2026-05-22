@@ -5,7 +5,6 @@ import User from '../models/userModel.js';
 export const getAllUsers = async (req, res) => {
   try {
     const users = await User.find();
-
     res.status(200).json({
       status: 'success',
       data: {
@@ -41,21 +40,14 @@ export const createUser = async (req, res) => {
 };
 
 export const findUser = async (req, res) => {
-  try {
-    const user = await User.findById(req.params.id);
+  const user = await User.findById(req.params.id);
 
-    res.status(200).json({
-      status: 'success',
-      data: {
-        user,
-      },
-    });
-  } catch (err) {
-    res.status(400).json({
-      status: 'fail',
-      message: err.message,
-    });
-  }
+  res.status(200).json({
+    status: 'success',
+    data: {
+      user,
+    },
+  });
 };
 
 export const updateUser = async (req, res) => {

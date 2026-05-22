@@ -13,12 +13,9 @@ if (process.env.NODE_ENV === 'development') {
 
 app.use(express.json());
 
-// Middleware
-
 app.use('/api/v1/comments', commentRouter);
 app.use('/api/v1/bugs', bugRouter);
 app.use('/api/v1/projects', projectRouter);
-
 // TODO: Implement auth routing: /api/v1/auth/users?
 app.use('/api/v1/users', userRouter);
 
@@ -29,11 +26,22 @@ app.get('/api/v1/health', (req, res) => {
   });
 });
 
-app.use((err, req, res, next) => {
-  console.log('Hit the error handler');
-  console.error(err.stack);
+app.use((req, res, next) => {
+  const err = new Error(`${req.originalUrl} on this server`);
+  err.statusCode = 404;
+  err.status = 'fail';
 
-  res.status(500).send('Something broke!');
+  next(err);
+});
+
+app.use((err, req, res, next) => {
+  const statusCode = err.statusCode || 500;
+  const status = err.status || 'error';
+
+  res.status(statusCode).json({
+    status,
+    message: err.message,
+  });
 });
 
 export default app;
