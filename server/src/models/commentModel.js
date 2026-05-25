@@ -8,6 +8,8 @@ const commentSchema = new mongoose.Schema(
       required: [true, 'A body is required'],
     },
     bug: { type: mongoose.Schema.Types.ObjectId, ref: 'Bug', required: true },
+    // TODO: FOR DEV PURPOSES: owner is currently accepted from request body until auth is implemented.
+
     author: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',

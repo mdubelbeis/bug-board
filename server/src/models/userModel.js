@@ -1,6 +1,5 @@
 import mongoose from 'mongoose';
 
-// TODO: Exclude "__v" from response
 const userSchema = new mongoose.Schema(
   {
     name: {

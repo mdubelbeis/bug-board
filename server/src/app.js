@@ -1,5 +1,9 @@
 import express from 'express';
 import morgan from 'morgan';
+import {
+  globalErrorHandler,
+  notFoundHandler,
+} from './middleware/errorMiddleware.js';
 import bugRouter from './routes/bugRoutes.js';
 import commentRouter from './routes/commentRoutes.js';
 import projectRouter from './routes/projectRoutes.js';
@@ -26,22 +30,7 @@ app.get('/api/v1/health', (req, res) => {
   });
 });
 
-app.use((req, res, next) => {
-  const err = new Error(`${req.originalUrl} on this server`);
-  err.statusCode = 404;
-  err.status = 'fail';
-
-  next(err);
-});
-
-app.use((err, req, res, next) => {
-  const statusCode = err.statusCode || 500;
-  const status = err.status || 'error';
-
-  res.status(statusCode).json({
-    status,
-    message: err.message,
-  });
-});
+app.use(notFoundHandler);
+app.use(globalErrorHandler);
 
 export default app;

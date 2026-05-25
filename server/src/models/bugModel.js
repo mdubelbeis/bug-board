@@ -38,6 +38,7 @@ const bugSchema = new mongoose.Schema(
       ref: 'Project',
       required: true,
     },
+    // TODO: FOR DEV PURPOSES: owner is currently accepted from request body until auth is implemented.
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',

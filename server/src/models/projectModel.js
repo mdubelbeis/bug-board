@@ -12,10 +12,12 @@ const projectSchema = new mongoose.Schema(
       trim: true,
       required: [true, 'A description is required'],
     },
+    // TODO: FOR DEV PURPOSES: owner is currently accepted from request body until auth is implemented.
     owner: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
-      required: true,
+      required: [true, 'A user is required'],
+      cast: 'Invalid user id: {VALUE}',
     },
   },
   { timestamps: true }
