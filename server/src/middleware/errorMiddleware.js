@@ -12,6 +12,21 @@ export const globalErrorHandler = (err, req, res, next) => {
   let message = err.message || 'Something went wrong';
   const errors = [];
 
+  if (err.code === 11000) {
+    statusCode = 400;
+    status = 'fail';
+    message = 'Duplicate field value';
+
+    const field = Object.keys(err.keyValue)[0];
+    const value = err.keyValue[field];
+
+    errors.push({
+      field,
+      value,
+      message: `${field} is already in use`,
+    });
+  }
+
   switch (err.name) {
     case 'ValidationError': {
       statusCode = 400;
