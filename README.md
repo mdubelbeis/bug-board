@@ -26,6 +26,15 @@ The board includes planned work for:
 - Frontend implementation
 - Deployment
 
+---
+
+## Documentation
+
+- [API Flow](./docs/api-flow.md)
+- [Error Handling Notes](./docs/error-handling.md)
+
+---
+
 ## Planned Features
 
 - User authentication
@@ -55,18 +64,15 @@ The board includes planned work for:
 ### Tools
 
 - pnpm
+- Postman
+- VS Code
+- Prettier
+- Morgan
 - Git/GitHub
 - ESLint
 - MongoDB Atlas
 
-## Project Structure
-
-```text
-bug-board/
-  client/
-  server/
-  README.md
-```
+---
 
 ## Development Status
 
