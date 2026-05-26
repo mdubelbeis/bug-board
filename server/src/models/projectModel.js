@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 
+// TODO: Implement coumpound index after implementing auth -> Auth user cannot have duplicate project names
 const projectSchema = new mongoose.Schema(
   {
     title: {
