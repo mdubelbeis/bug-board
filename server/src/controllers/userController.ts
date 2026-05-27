@@ -1,8 +1,14 @@
+import type { NextFunction, Request, Response } from 'express';
 import User from '../models/userModel.js';
+import AppError from '../utils/AppError.js';
 
 // TODO: REDO WITH Controller with /api/auth
 
-export const getAllUsers = async (req, res, next) => {
+export const getAllUsers = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const users = await User.find();
   res.status(200).json({
     status: 'success',
@@ -12,11 +18,16 @@ export const getAllUsers = async (req, res, next) => {
   });
 };
 
-export const createUser = async (req, res, next) => {
+// TODO: Test user.password on create response
+export const createUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   // TODO: Implement bcrypt on password?
   const user = await User.create(req.body);
 
-  user.password = undefined;
+  user.password = '';
   res.status(201).json({
     status: 'success',
     data: {
@@ -25,13 +36,15 @@ export const createUser = async (req, res, next) => {
   });
 };
 
-export const findUser = async (req, res, next) => {
+export const findUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const user = await User.findById(req.params.id);
 
   if (!user) {
-    const err = new Error('User not found');
-    err.statusCode = 404;
-    err.status = 'fail';
+    const err = new AppError('User not found', 404);
     return next(err);
   }
 
@@ -43,16 +56,18 @@ export const findUser = async (req, res, next) => {
   });
 };
 
-export const updateUser = async (req, res, next) => {
+export const updateUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const user = await User.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true,
   });
 
   if (!user) {
-    const err = new Error('User not found');
-    err.statusCode = 404;
-    err.status = 'fail';
+    const err = new AppError('User not found', 404);
     return next(err);
   }
 
@@ -64,13 +79,15 @@ export const updateUser = async (req, res, next) => {
   });
 };
 
-export const deleteUser = async (req, res, next) => {
+export const deleteUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const user = await User.findByIdAndDelete(req.params.id);
 
   if (!user) {
-    const err = new Error('User not found');
-    err.statusCode = 404;
-    err.status = 'fail';
+    const err = new AppError('User not found', 404);
     return next(err);
   }
 

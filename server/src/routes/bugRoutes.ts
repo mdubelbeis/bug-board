@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Router } from 'express';
 import {
   createBug,
   deleteBug,
@@ -7,7 +7,7 @@ import {
   updateBug,
 } from '../controllers/bugController.js';
 
-const router = express.Router();
+const router: Router = express.Router();
 
 router.route('/').get(getAllBugs).post(createBug);
 router.route('/:id').get(findBug).patch(updateBug).delete(deleteBug);

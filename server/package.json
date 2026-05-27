@@ -2,11 +2,12 @@
   "name": "server",
   "version": "0.0.1",
   "description": "Backend API for Bug Board Full Stack Application",
-  "main": "index.js",
+  "main": "dist/server.js",
   "type": "module",
   "scripts": {
-    "dev": "nodemon src/server.js",
-    "start": "node src/server.js"
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js"
   },
   "keywords": [],
   "author": "Mason J. Dubelbeis",
@@ -26,6 +27,11 @@
     "morgan": "^1.10.1"
   },
   "devDependencies": {
-    "nodemon": "^3.1.14"
+    "@types/express": "^5.0.6",
+    "@types/morgan": "^1.9.10",
+    "@types/node": "^25.9.1",
+    "nodemon": "^3.1.14",
+    "tsx": "^4.22.3",
+    "typescript": "^6.0.3"
   }
 }

@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { type Express } from 'express';
 import morgan from 'morgan';
 import {
   globalErrorHandler,
@@ -9,7 +9,7 @@ import commentRouter from './routes/commentRoutes.js';
 import projectRouter from './routes/projectRoutes.js';
 import userRouter from './routes/userRoutes.js';
 
-const app = express();
+const app: Express = express();
 
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));

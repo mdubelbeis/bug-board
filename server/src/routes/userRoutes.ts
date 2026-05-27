@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Router } from 'express';
 
 // TODO: Implement auth routing
 
@@ -10,7 +10,7 @@ import {
   updateUser,
 } from '../controllers/userController.js';
 
-const router = express.Router();
+const router: Router = express.Router();
 
 // ROUTES CONFIG
 router.route('/').get(getAllUsers).post(createUser);

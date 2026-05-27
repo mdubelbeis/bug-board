@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Router } from 'express';
 import {
   createComment,
   deleteComment,
@@ -7,7 +7,7 @@ import {
   updateComment,
 } from '../controllers/commentController.js';
 
-const router = express.Router();
+const router: Router = express.Router();
 
 router.route('/').get(getAllComments).post(createComment);
 router

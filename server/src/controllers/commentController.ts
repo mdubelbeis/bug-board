@@ -1,6 +1,8 @@
+import type { NextFunction, Request, Response } from 'express';
 import Comment from '../models/commentModel.js';
+import AppError from '../utils/AppError.js';
 
-export const getAllComments = async (req, res) => {
+export const getAllComments = async (req: Request, res: Response) => {
   const comments = await Comment.find();
 
   res.status(200).json({
@@ -12,7 +14,7 @@ export const getAllComments = async (req, res) => {
   });
 };
 
-export const createComment = async (req, res) => {
+export const createComment = async (req: Request, res: Response) => {
   const comment = await Comment.create(req.body);
 
   res.status(201).json({
@@ -23,13 +25,15 @@ export const createComment = async (req, res) => {
   });
 };
 
-export const findComment = async (req, res, next) => {
+export const findComment = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const comment = await Comment.findById(req.params.id);
 
   if (!comment) {
-    const err = new Error('Comment not found');
-    err.statusCode = 404;
-    err.status = 'fail';
+    const err = new AppError('Comment not found', 404);
     return next(err);
   }
 
@@ -41,16 +45,18 @@ export const findComment = async (req, res, next) => {
   });
 };
 
-export const updateComment = async (req, res, next) => {
+export const updateComment = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const comment = await Comment.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true,
   });
 
   if (!comment) {
-    const err = new Error('Comment not found');
-    err.statusCode = 404;
-    err.status = 'fail';
+    const err = new AppError('Comment not found', 404);
     return next(err);
   }
 
@@ -62,13 +68,15 @@ export const updateComment = async (req, res, next) => {
   });
 };
 
-export const deleteComment = async (req, res, next) => {
+export const deleteComment = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const comment = await Comment.findByIdAndDelete(req.params.id);
 
   if (!comment) {
-    const err = new Error('Comment not found');
-    err.statusCode = 404;
-    err.status = 'fail';
+    const err = new AppError('Comment not found', 404);
     return next(err);
   }
 

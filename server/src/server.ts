@@ -7,8 +7,8 @@ const PORT = process.env.PORT || 8000;
 
 const { default: app } = await import('./app.js');
 
-const DB_CLOUD = process.env.DB_CLOUD;
-const DB_LOCAL = process.env.DB_LOCAL;
+const DB_CLOUD = process.env.DB_CLOUD!;
+const DB_LOCAL = process.env.DB_LOCAL!;
 
 mongoose
   .connect(DB_LOCAL)

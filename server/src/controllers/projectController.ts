@@ -1,6 +1,8 @@
+import type { NextFunction, Request, Response } from 'express';
 import Project from '../models/projectModel.js';
+import AppError from '../utils/AppError.js';
 
-export const getAllProjects = async (req, res) => {
+export const getAllProjects = async (req: Request, res: Response) => {
   const projects = await Project.find();
 
   res.status(200).json({
@@ -12,13 +14,15 @@ export const getAllProjects = async (req, res) => {
   });
 };
 
-export const findProject = async (req, res, next) => {
+export const findProject = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const project = await Project.findById(req.params.id);
 
   if (!project) {
-    const err = new Error('Project not found');
-    err.statusCode = 404;
-    err.status = 'fail';
+    const err = new AppError('Project not found', 404);
     return next(err);
   }
 
@@ -30,7 +34,7 @@ export const findProject = async (req, res, next) => {
   });
 };
 
-export const createProject = async (req, res) => {
+export const createProject = async (req: Request, res: Response) => {
   const project = await Project.create(req.body);
 
   res.status(201).json({
@@ -41,16 +45,18 @@ export const createProject = async (req, res) => {
   });
 };
 
-export const updateProject = async (req, res, next) => {
+export const updateProject = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const project = await Project.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true,
   });
 
   if (!project) {
-    const err = new Error('Project not found');
-    err.statusCode = 404;
-    err.status = 'fail';
+    const err = new AppError('Comment not found', 404);
     return next(err);
   }
 
@@ -62,13 +68,15 @@ export const updateProject = async (req, res, next) => {
   });
 };
 
-export const deleteProject = async (req, res, next) => {
+export const deleteProject = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const project = await Project.findByIdAndDelete(req.params.id);
 
   if (!project) {
-    const err = new Error('Project not found');
-    err.statusCode = 404;
-    err.status = 'fail';
+    const err = new AppError('Comment not found', 404);
     return next(err);
   }
 
