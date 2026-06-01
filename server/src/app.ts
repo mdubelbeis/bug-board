@@ -4,6 +4,7 @@ import {
   globalErrorHandler,
   notFoundHandler,
 } from './middleware/errorMiddleware.js';
+import authRouter from './routes/authRoutes.js';
 import bugRouter from './routes/bugRoutes.js';
 import commentRouter from './routes/commentRoutes.js';
 import projectRouter from './routes/projectRoutes.js';
@@ -22,6 +23,7 @@ app.use('/api/v1/bugs', bugRouter);
 app.use('/api/v1/projects', projectRouter);
 // TODO: Implement auth routing: /api/v1/auth/users?
 app.use('/api/v1/users', userRouter);
+app.use('/api/v1/auth', authRouter);
 
 // TODO: Implement advanced routes
 

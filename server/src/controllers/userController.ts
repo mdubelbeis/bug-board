@@ -18,7 +18,6 @@ export const getAllUsers = async (
   });
 };
 
-// TODO: Test user.password on create response
 export const createUser = async (
   req: Request,
   res: Response,
@@ -28,6 +27,7 @@ export const createUser = async (
   const user = await User.create(req.body);
 
   user.password = '';
+  user.passwordConfirm = '';
   res.status(201).json({
     status: 'success',
     data: {

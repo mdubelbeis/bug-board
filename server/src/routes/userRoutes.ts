@@ -1,7 +1,5 @@
 import express, { Router } from 'express';
 
-// TODO: Implement auth routing
-
 import {
   createUser,
   deleteUser,
