@@ -51,7 +51,7 @@ export const updateProject = async (
   next: NextFunction
 ) => {
   const project = await Project.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
+    returnDocument: 'after',
     runValidators: true,
   });
 

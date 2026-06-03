@@ -51,7 +51,7 @@ export const updateComment = async (
   next: NextFunction
 ) => {
   const comment = await Comment.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
+    returnDocument: 'after',
     runValidators: true,
   });
 

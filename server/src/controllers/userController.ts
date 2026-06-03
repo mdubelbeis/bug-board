@@ -62,7 +62,7 @@ export const updateUser = async (
   next: NextFunction
 ) => {
   const user = await User.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
+    returnDocument: 'after',
     runValidators: true,
   });
 

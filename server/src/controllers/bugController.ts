@@ -51,7 +51,7 @@ export const updateBug = async (
   next: NextFunction
 ) => {
   const bug = await Bug.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
+    returnDocument: 'after',
     runValidators: true,
   });
 

@@ -5,6 +5,7 @@ export interface IUser {
   email: string;
   password: string;
   passwordConfirm: string;
+  passwordChangedAt?: Date;
 }
 
 export interface UserMethods {
@@ -12,6 +13,8 @@ export interface UserMethods {
     candidatePassword: string,
     userPassword: string
   ): Promise<boolean>;
+
+  passwordChangedAfter(jwtTimestamp: number): boolean;
 }
 
 export type UserModel = Model<IUser, {}, UserMethods>;

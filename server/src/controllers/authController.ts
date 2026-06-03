@@ -71,3 +71,120 @@ export const login = async (
     token,
   });
 };
+
+export const updateAuthUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  // Update non
+};
+
+export const updateUserPassword = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const user = await User.findById(req.user?._id).select('+password');
+
+  if (!user) {
+    return next(new AppError('User not found', 404));
+  }
+
+  const isPasswordCorrect = await user.correctPassword(
+    req.body.currentPassword,
+    user.password
+  );
+
+  if (!isPasswordCorrect) {
+    return next(new AppError('Current password is incorrect.', 401));
+  }
+
+  user.password = req.body.password;
+  user.passwordConfirm = req.body.passwordConfirm;
+  user.passwordChangedAt = new Date(Date.now() - 1000);
+
+  await user.save();
+
+  const token = signToken(user._id.toString());
+
+  res.status(200).json({
+    status: 'success',
+    token,
+  });
+};
+
+export const getAuthUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {};
+
+export const protect = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const secret = process.env.JWT_SECRET;
+
+  if (!secret) {
+    throw new Error('JWT secret is not defined');
+  }
+
+  const jwtExpiresIn = (process.env.JWT_EXPIRES_IN || '1d') as StringValue;
+
+  let token: string | undefined;
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith('Bearer ')
+  ) {
+    token = req.headers.authorization.split(' ')[1];
+  }
+
+  if (!token) {
+    return next(
+      new AppError('You are not logged in. Please log in to get access', 401)
+    );
+  }
+
+  try {
+    const decoded = jwt.verify(token, secret);
+
+    if (typeof decoded === 'string' || !decoded.id) {
+      return next(new AppError('Invalid token. Please log in again.', 401));
+    }
+
+    const user = await User.findById(decoded.id);
+
+    if (!user) {
+      return next(new AppError('Invalid user. Login or register again.', 401));
+    }
+
+    if (!decoded.iat) {
+      return next(new AppError('Invalid token. Please log in again.', 401));
+    }
+
+    if (user.passwordChangedAfter(decoded.iat)) {
+      return next(
+        new AppError(
+          'User recently changed password. Please log in again.',
+          401
+        )
+      );
+    }
+
+    // Grant access to protected route
+    req.user = user;
+    next();
+  } catch (err) {
+    if (err instanceof Error && err.name === 'TokenExpiredError') {
+      return next(new AppError('Token expired. Please log in again.', 401));
+    }
+
+    if (err instanceof Error && err.name === 'JsonWebTokenError') {
+      return next(new AppError('Invalid token. Please log in again.', 401));
+    }
+
+    return next(err);
+  }
+};
