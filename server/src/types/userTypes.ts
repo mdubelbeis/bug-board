@@ -1,4 +1,4 @@
-import type { HydratedDocument } from 'mongoose';
+import type { HydratedDocument, Model } from 'mongoose';
 
 export interface IUser {
   name: string;
@@ -7,4 +7,13 @@ export interface IUser {
   passwordConfirm: string;
 }
 
-export type UserDocument = HydratedDocument<IUser>;
+export interface UserMethods {
+  correctPassword(
+    candidatePassword: string,
+    userPassword: string
+  ): Promise<boolean>;
+}
+
+export type UserModel = Model<IUser, {}, UserMethods>;
+
+export type UserDocument = HydratedDocument<IUser, UserMethods>;

@@ -1,9 +1,14 @@
 import bcrypt from 'bcrypt';
 import mongoose from 'mongoose';
 import validator from 'validator';
-import type { IUser, UserDocument } from '../types/userTypes.js';
+import type {
+  IUser,
+  UserDocument,
+  UserMethods,
+  UserModel,
+} from '../types/userTypes.js';
 
-const userSchema = new mongoose.Schema<IUser>(
+const userSchema = new mongoose.Schema<IUser, UserModel, UserMethods>(
   {
     name: {
       type: String,
@@ -47,6 +52,14 @@ userSchema.pre('save', async function (this: UserDocument) {
   this.set('passwordConfirm', undefined);
 });
 
-const User = mongoose.model<IUser>('User', userSchema);
+userSchema.methods.correctPassword = async function (
+  this: UserDocument,
+  candidatePassword: string,
+  userPassword: string
+): Promise<boolean> {
+  return await bcrypt.compare(candidatePassword, userPassword);
+};
+
+const User = mongoose.model<IUser, UserModel>('User', userSchema);
 
 export default User;
