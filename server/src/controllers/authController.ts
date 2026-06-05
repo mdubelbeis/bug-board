@@ -4,7 +4,7 @@ import type { StringValue } from 'ms';
 import User from '../models/userModel.js';
 import AppError from '../utils/AppError.js';
 
-const signToken = (id: Object) => {
+const signToken = (id: string) => {
   const secret = process.env.JWT_SECRET;
 
   if (!secret) {
@@ -30,7 +30,7 @@ export const signup = async (
     passwordConfirm: req.body.passwordConfirm,
   });
 
-  const token = signToken(user._id);
+  const token = signToken(user._id.toString());
 
   user.password = '';
   user.passwordConfirm = '';
@@ -64,7 +64,7 @@ export const login = async (
     return next(new AppError('Incorrect email or password', 404));
   }
 
-  const token = signToken(user._id);
+  const token = signToken(user._id.toString());
 
   res.status(200).json({
     status: 'success',
