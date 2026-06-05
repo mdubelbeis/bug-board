@@ -1,5 +1,6 @@
 import express, { type Express } from 'express';
 import morgan from 'morgan';
+import { protect } from './middleware/authMiddleware.js';
 import {
   globalErrorHandler,
   notFoundHandler,
@@ -18,11 +19,10 @@ if (process.env.NODE_ENV === 'development') {
 
 app.use(express.json());
 
-app.use('/api/v1/comments', commentRouter);
-app.use('/api/v1/bugs', bugRouter);
-app.use('/api/v1/projects', projectRouter);
-// TODO: Implement auth routing: /api/v1/auth/users?
-app.use('/api/v1/users', userRouter);
+app.use('/api/v1/comments', protect, commentRouter);
+app.use('/api/v1/bugs', protect, bugRouter);
+app.use('/api/v1/projects', protect, projectRouter);
+app.use('/api/v1/users', protect, userRouter);
 app.use('/api/v1/auth', authRouter);
 
 // TODO: Implement advanced routes

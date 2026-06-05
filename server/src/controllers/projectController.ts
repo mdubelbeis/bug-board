@@ -35,6 +35,8 @@ export const findProject = async (
 };
 
 export const createProject = async (req: Request, res: Response) => {
+  // TODO: Do not send req.body. Assign each field to an object to pass to .create()
+  // TODO: Role/Ownership - Set req.user to user._id
   const project = await Project.create(req.body);
 
   res.status(201).json({
@@ -50,6 +52,8 @@ export const updateProject = async (
   res: Response,
   next: NextFunction
 ) => {
+  // TODO: Do not send req.body. Assign each field to an object to pass to .create()
+  // TODO: Role/Ownership - Set req.user to user._id
   const project = await Project.findByIdAndUpdate(req.params.id, req.body, {
     returnDocument: 'after',
     runValidators: true,

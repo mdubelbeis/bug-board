@@ -15,6 +15,8 @@ export const getAllBugs = async (req: Request, res: Response) => {
 };
 
 export const createBug = async (req: Request, res: Response) => {
+  // TODO: Do not send req.body. Assign each field to an object to pass to .create()
+  // TODO: Role/Ownership - Set req.user to user._id
   const bug = await Bug.create(req.body);
 
   res.status(201).json({
@@ -50,6 +52,8 @@ export const updateBug = async (
   res: Response,
   next: NextFunction
 ) => {
+  // TODO: Do not send req.body. Assign each field to an object to pass to .create()
+  // TODO: Role/Ownership - Set req.user to user._id
   const bug = await Bug.findByIdAndUpdate(req.params.id, req.body, {
     returnDocument: 'after',
     runValidators: true,

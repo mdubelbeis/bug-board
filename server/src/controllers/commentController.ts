@@ -15,6 +15,8 @@ export const getAllComments = async (req: Request, res: Response) => {
 };
 
 export const createComment = async (req: Request, res: Response) => {
+  // TODO: Do not send req.body. Assign each field to an object to pass to .create()
+  // TODO: Role/Ownership - Set req.user to user._id
   const comment = await Comment.create(req.body);
 
   res.status(201).json({
@@ -50,6 +52,8 @@ export const updateComment = async (
   res: Response,
   next: NextFunction
 ) => {
+  // TODO: Do not send req.body. Assign each field to an object to pass to findByIdAndUpdate
+  // TODO: Role/Ownership - Set req.user to user._id
   const comment = await Comment.findByIdAndUpdate(req.params.id, req.body, {
     returnDocument: 'after',
     runValidators: true,

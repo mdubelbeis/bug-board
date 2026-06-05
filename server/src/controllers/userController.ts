@@ -2,7 +2,7 @@ import type { NextFunction, Request, Response } from 'express';
 import User from '../models/userModel.js';
 import AppError from '../utils/AppError.js';
 
-// TODO: REDO WITH Controller with /api/auth
+// TODO: Role/Ownership: Admin only route
 
 export const getAllUsers = async (
   req: Request,
@@ -23,7 +23,8 @@ export const createUser = async (
   res: Response,
   next: NextFunction
 ) => {
-  // TODO: Implement bcrypt on password?
+  // TODO: Do not send req.body. Assign each field to an object to pass to .create()
+  // TODO: Role/Ownership - Set req.user to user._id
   const user = await User.create(req.body);
 
   user.password = '';
@@ -61,6 +62,8 @@ export const updateUser = async (
   res: Response,
   next: NextFunction
 ) => {
+  // TODO: Do not send req.body. Assign each field to an object to pass to .create()
+  // TODO: Role/Ownership - Set req.user to user._id
   const user = await User.findByIdAndUpdate(req.params.id, req.body, {
     returnDocument: 'after',
     runValidators: true,
