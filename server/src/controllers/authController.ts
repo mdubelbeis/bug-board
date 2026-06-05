@@ -77,7 +77,45 @@ export const updateAuthUser = async (
   res: Response,
   next: NextFunction
 ) => {
-  // Update non
+  if (!req.user) {
+    return next(new AppError('You are not logged in.', 401));
+  }
+
+  if (req.body.password || req.body.passwordConfirm) {
+    return next(
+      new AppError(
+        'This route is not for password updates. Please use /update-password.',
+        400
+      )
+    );
+  }
+
+  const updatedUser = await User.findByIdAndUpdate(
+    req.user._id,
+    {
+      name: req.body.name,
+      email: req.body.email,
+    },
+    {
+      returnDocument: 'after',
+      runValidators: true,
+    }
+  );
+
+  if (!updatedUser) {
+    return next(new AppError('User not found.', 404));
+  }
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      user: {
+        id: updatedUser._id,
+        name: updatedUser.name,
+        email: updatedUser.email,
+      },
+    },
+  });
 };
 
 export const updateUserPassword = async (
@@ -118,4 +156,19 @@ export const getAuthUser = async (
   req: Request,
   res: Response,
   next: NextFunction
-) => {};
+) => {
+  if (!req.user) {
+    return next(new AppError('You are not logged in.', 401));
+  }
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      user: {
+        id: req.user._id,
+        name: req.user.name,
+        email: req.user.email,
+      },
+    },
+  });
+};
