@@ -14,6 +14,9 @@ importers:
       react-dom:
         specifier: ^19.2.6
         version: 19.2.6(react@19.2.6)
+      react-router-dom:
+        specifier: 6.4.1
+        version: 6.4.1(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
     devDependencies:
       '@eslint/js':
         specifier: ^10.0.1
@@ -213,6 +216,10 @@ packages:
 
   '@oxc-project/types@0.130.0':
     resolution: {integrity: sha512-ibD2usx9JRu7f5pu2tMKMI4cpA4NgXJQoYRP4pQ7Pxmn1l6k/53qWtQWZayhYy3X4QZkt90Ot+mJEaeXouio6Q==}
+
+  '@remix-run/router@1.0.1':
+    resolution: {integrity: sha512-eBV5rvW4dRFOU1eajN7FmYxjAIVz/mRHgUE9En9mBn6m3mulK3WTR5C3iQhL9MZ14rWAq+xOlEaCkDiW0/heOg==}
+    engines: {node: '>=14'}
 
   '@rolldown/binding-android-arm64@1.0.1':
     resolution: {integrity: sha512-fJI3I0r3C3Oj/zdBCpaCmBRZYf07xpaq4yCfDDoSFm+beWNzbIl26puW8RraUdugoJw/95zerNOn6jasAhzSmg==}
@@ -782,6 +789,19 @@ packages:
     peerDependencies:
       react: ^19.2.6
 
+  react-router-dom@6.4.1:
+    resolution: {integrity: sha512-MY7NJCrGNVJtGp8ODMOBHu20UaIkmwD2V3YsAOUQoCXFk7Ppdwf55RdcGyrSj+ycSL9Uiwrb3gTLYSnzcRoXww==}
+    engines: {node: '>=14'}
+    peerDependencies:
+      react: '>=16.8'
+      react-dom: '>=16.8'
+
+  react-router@6.4.1:
+    resolution: {integrity: sha512-OJASKp5AykDWFewgWUim1vlLr7yfD4vO/h+bSgcP/ix8Md+LMHuAjovA74MQfsfhQJGGN1nHRhwS5qQQbbBt3A==}
+    engines: {node: '>=14'}
+    peerDependencies:
+      react: '>=16.8'
+
   react@19.2.6:
     resolution: {integrity: sha512-sfWGGfavi0xr8Pg0sVsyHMAOziVYKgPLNrS7ig+ivMNb3wbCBw3KxtflsGBAwD3gYQlE/AEZsTLgToRrSCjb0Q==}
     engines: {node: '>=0.10.0'}
@@ -1119,6 +1139,8 @@ snapshots:
     optional: true
 
   '@oxc-project/types@0.130.0': {}
+
+  '@remix-run/router@1.0.1': {}
 
   '@rolldown/binding-android-arm64@1.0.1':
     optional: true
@@ -1610,6 +1632,18 @@ snapshots:
     dependencies:
       react: 19.2.6
       scheduler: 0.27.0
+
+  react-router-dom@6.4.1(react-dom@19.2.6(react@19.2.6))(react@19.2.6):
+    dependencies:
+      '@remix-run/router': 1.0.1
+      react: 19.2.6
+      react-dom: 19.2.6(react@19.2.6)
+      react-router: 6.4.1(react@19.2.6)
+
+  react-router@6.4.1(react@19.2.6):
+    dependencies:
+      '@remix-run/router': 1.0.1
+      react: 19.2.6
 
   react@19.2.6: {}
 
