@@ -49,13 +49,39 @@ Current frontend focus:
 
 Implemented/planned page folders:
 
-txt src/ pages/ account/ bugs/ dashboard/ landing/ login/ not-found/ projects/ root/ signup/
+```txt
+src/
+  pages/
+    account/
+    bugs/
+    dashboard/
+    landing/
+    login/
+    not-found/
+    projects/
+    root/
+    signup/
+```
 
 ---
 
 ## Planned Frontend Routes
 
-txt / Landing page /login Login page /signup Signup page /dashboard Dashboard /projects Projects list /projects/new Create project /projects/:projectId Project details /projects/:projectId/bugs/new Create bug /bugs/:bugId Bug details /account Account page \* Not found page
+```txt
+/                              Landing page
+/login                         Login page
+/signup                        Signup page
+
+/dashboard                     Dashboard
+/projects                      Projects list
+/projects/new                  Create project
+/projects/:projectId           Project details
+/projects/:projectId/bugs/new  Create bug
+/bugs/:bugId                   Bug details
+
+/account                       Account page
+*                              Not found page
+```
 
 ---
 
@@ -63,7 +89,22 @@ txt / Landing page /login Login page /signup Signup page /dashboard Dashboard /p
 
 The app uses route layouts to separate public pages from authenticated app pages.
 
-txt RootLayout PublicLayout LandingPage LoginPage SignupPage ProtectedLayout DashboardPage ProjectsPage CreateProjectPage ProjectDetailPage CreateBugPage BugDetailPage AccountPage
+```txt
+RootLayout
+  PublicLayout
+    LandingPage
+    LoginPage
+    SignupPage
+
+  ProtectedLayout
+    DashboardPage
+    ProjectsPage
+    CreateProjectPage
+    ProjectDetailPage
+    CreateBugPage
+    BugDetailPage
+    AccountPage
+```
 
 ### RootLayout
 
@@ -83,7 +124,52 @@ Protected routes will require the user to be authenticated before viewing app co
 
 ## Suggested Page Structure
 
-txt src/ pages/ account/ AccountPage.tsx AccountPage.module.css bugs/ BugDetailPage.tsx BugDetailPage.module.css CreateBugPage.tsx CreateBugPage.module.css dashboard/ DashboardPage.tsx DashboardPage.module.css landing/ LandingPage.tsx LandingPage.module.css login/ LoginPage.tsx LoginPage.module.css not-found/ NotFoundPage.tsx NotFoundPage.module.css projects/ ProjectsPage.tsx ProjectsPage.module.css ProjectDetailPage.tsx ProjectDetailPage.module.css CreateProjectPage.tsx CreateProjectPage.module.css root/ RootLayout.tsx PublicLayout.tsx ProtectedLayout.tsx signup/ SignupPage.tsx SignupPage.module.css
+```txt
+src/
+  pages/
+    account/
+      AccountPage.tsx
+      AccountPage.module.css
+
+    bugs/
+      BugDetailPage.tsx
+      BugDetailPage.module.css
+      CreateBugPage.tsx
+      CreateBugPage.module.css
+
+    dashboard/
+      DashboardPage.tsx
+      DashboardPage.module.css
+
+    landing/
+      LandingPage.tsx
+      LandingPage.module.css
+
+    login/
+      LoginPage.tsx
+      LoginPage.module.css
+
+    not-found/
+      NotFoundPage.tsx
+      NotFoundPage.module.css
+
+    projects/
+      ProjectsPage.tsx
+      ProjectsPage.module.css
+      ProjectDetailPage.tsx
+      ProjectDetailPage.module.css
+      CreateProjectPage.tsx
+      CreateProjectPage.module.css
+
+    root/
+      RootLayout.tsx
+      PublicLayout.tsx
+      ProtectedLayout.tsx
+
+    signup/
+      SignupPage.tsx
+      SignupPage.module.css
+```
 
 ---
 
@@ -91,15 +177,29 @@ txt src/ pages/ account/ AccountPage.tsx AccountPage.module.css bugs/ BugDetailP
 
 The backend currently supports:
 
-txt POST /api/v1/auth/signup POST /api/v1/auth/login GET /api/v1/auth/me PATCH /api/v1/auth/me PATCH /api/v1/auth/update-password
+```txt
+POST  /api/v1/auth/signup
+POST  /api/v1/auth/login
+GET   /api/v1/auth/me
+PATCH /api/v1/auth/me
+PATCH /api/v1/auth/update-password
+```
 
 Frontend auth flow:
 
-txt signup/login -> receive token -> store auth state -> redirect to dashboard -> use token for protected API requests
+```txt
+signup/login
+  -> receive token
+  -> store auth state
+  -> redirect to dashboard
+  -> use token for protected API requests
+```
 
 Protected API requests require:
 
-txt Authorization: Bearer <token>
+```txt
+Authorization: Bearer <token>
+```
 
 For the current version, token handling may start with local storage or in-memory state. A future improvement may move auth to Secure, HttpOnly cookies.
 
@@ -111,11 +211,19 @@ The client connects to the Bug-Board Express API.
 
 Base API path:
 
-txt /api/v1
+```txt
+/api/v1
+```
 
 Main resources:
 
-txt /auth /users /projects /bugs /comments
+```txt
+/auth
+/users
+/projects
+/bugs
+/comments
+```
 
 See the server README for detailed backend API documentation.
 
@@ -125,19 +233,27 @@ See the server README for detailed backend API documentation.
 
 Install dependencies from the client directory:
 
-bash pnpm install
+```bash
+pnpm install
+```
 
 Start the development server:
 
-bash pnpm dev
+```bash
+pnpm dev
+```
 
 Build the client:
 
-bash pnpm build
+```bash
+pnpm build
+```
 
 Preview the production build:
 
-bash pnpm preview
+```bash
+pnpm preview
+```
 
 ---
 
