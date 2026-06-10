@@ -1,6 +1,6 @@
 # Bug-Board
 
-Bug-Board is a full-stack bug tracking application built with React, Express, TypeScript, and MongoDB.
+Bug-Board is a full-stack bug tracking application built with Vue, Express, TypeScript, and MongoDB.
 
 The goal of Bug-Board is to provide a simple project-based bug tracking workflow where users can create projects, track bugs, update issue status, and manage comments.
 
@@ -17,8 +17,9 @@ Build a portfolio-ready full-stack application that demonstrates:
 - JWT authentication
 - Protected routes
 - MongoDB/Mongoose data modeling
-- React routing and page structure
+- Vue frontend routing and page structure
 - Project, bug, and comment workflows
+- Ability to build across different frontend frameworks
 
 ---
 
@@ -28,7 +29,7 @@ Bug-Board currently includes backend API foundations and initial frontend planni
 
 Current focus:
 
-- React frontend implementation
+- Vue frontend implementation
 - Frontend routing
 - Public and protected page layouts
 - Login/signup UI
@@ -43,8 +44,7 @@ Completed so far:
 - JWT signup/login authentication
 - Protected auth routes
 - Password hashing and password update flow
-- Initial React/Vite frontend setup
-- Frontend route planning
+- Initial frontend route planning
 
 Next backend focus:
 
@@ -58,11 +58,11 @@ Next backend focus:
 
 ### Frontend
 
-- React
+- Vue
 - Vite
 - TypeScript
-- React Router
-- CSS Modules
+- Vue Router
+- CSS Modules or scoped styles
 
 ### Backend
 
@@ -89,16 +89,21 @@ Next backend focus:
 
 ## Repository Structure
 
-txt bug-board/ client/ React frontend server/ Express API docs/ Project notes and API documentation
+```txt
+bug-board/
+  client/     Vue frontend
+  server/     Express API
+  docs/       Project notes and API documentation
+```
 
 ---
 
 ## Documentation
 
-- Client README
-- Server README
-- API Flow
-- Error Handling Notes
+- [Client README](./client/README.md)
+- [Server README](./server/README.md)
+- [API Flow](./docs/api-flow.md)
+- [Error Handling Notes](./docs/error-handling.md)
 
 ---
 
@@ -106,7 +111,21 @@ txt bug-board/ client/ React frontend server/ Express API docs/ Project notes an
 
 Planned frontend route structure:
 
-txt / Landing page /login Login page /signup Signup page /dashboard Dashboard /projects Projects list /projects/new Create project /projects/:projectId Project details /projects/:projectId/bugs/new Create bug /bugs/:bugId Bug details /account Account page \* Not found page
+```txt
+/                              Landing page
+/login                         Login page
+/signup                        Signup page
+
+/dashboard                     Dashboard
+/projects                      Projects list
+/projects/new                  Create project
+/projects/:projectId           Project details
+/projects/:projectId/bugs/new  Create bug
+/bugs/:bugId                   Bug details
+
+/account                       Account page
+*                              Not found page
+```
 
 ---
 
@@ -114,11 +133,19 @@ txt / Landing page /login Login page /signup Signup page /dashboard Dashboard /p
 
 Base API path:
 
-txt /api/v1
+```txt
+/api/v1
+```
 
 Current API resources:
 
-txt /auth /users /projects /bugs /comments
+```txt
+/auth
+/users
+/projects
+/bugs
+/comments
+```
 
 Auth routes include signup, login, current user, profile update, and password update.
 
@@ -147,6 +174,6 @@ More API details are documented in the server README.
 ## Project Planning
 
 View the project board here:  
-Bug Board Project
+[Bug Board Project](https://github.com/users/mdubelbeis/projects/6/views/1)
 
 Bug-Board is being developed using a public GitHub Project board to track feature work, backend milestones, user stories, frontend tasks, authorization work, and deployment planning.
