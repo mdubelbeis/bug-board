@@ -1,6 +1,6 @@
 # Bug-Board
 
-Bug-Board is a full-stack bug tracking application built with Vue, Express, TypeScript, and MongoDB.
+Bug-Board is a full-stack bug tracking application built with React, Express, TypeScript, and MongoDB.
 
 The goal of Bug-Board is to provide a simple project-based bug tracking workflow where users can create projects, track bugs, update issue status, and manage comments.
 
@@ -17,9 +17,9 @@ Build a portfolio-ready full-stack application that demonstrates:
 - JWT authentication
 - Protected routes
 - MongoDB/Mongoose data modeling
-- Vue frontend routing and page structure
+- React frontend routing and page structure
 - Project, bug, and comment workflows
-- Ability to build across different frontend frameworks
+- Real-world full-stack application architecture
 
 ---
 
@@ -29,7 +29,7 @@ Bug-Board currently includes backend API foundations and initial frontend planni
 
 Current focus:
 
-- Vue frontend implementation
+- React frontend implementation
 - Frontend routing
 - Public and protected page layouts
 - Login/signup UI
@@ -58,11 +58,11 @@ Next backend focus:
 
 ### Frontend
 
-- Vue
+- React
 - Vite
 - TypeScript
-- Vue Router
-- CSS Modules or scoped styles
+- React Router
+- CSS Modules
 
 ### Backend
 
@@ -91,7 +91,7 @@ Next backend focus:
 
 ```txt
 bug-board/
-  client/     Vue frontend
+  client/     React frontend
   server/     Express API
   docs/       Project notes and API documentation
 ```
