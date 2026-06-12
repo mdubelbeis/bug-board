@@ -4,7 +4,7 @@ import type { StringValue } from 'ms';
 import User from '../models/userModel.js';
 import AppError from '../utils/AppError.js';
 
-const signToken = (id: Object) => {
+const signToken = (id: string) => {
   const secret = process.env.JWT_SECRET;
 
   if (!secret) {
@@ -30,16 +30,17 @@ export const signup = async (
     passwordConfirm: req.body.passwordConfirm,
   });
 
-  const token = signToken(user._id);
-
-  user.password = '';
-  user.passwordConfirm = '';
+  const token = signToken(user._id.toString());
 
   res.status(201).json({
     status: 'success',
     token,
     data: {
-      user,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+      },
     },
   });
 };
@@ -58,17 +59,26 @@ export const login = async (
     return next(err);
   }
 
-  const user = await User.findOne({ email }).select('+password');
+  const user = await User.findOne({ email: email.toLowerCase() }).select(
+    '+password'
+  );
 
   if (!user || !(await user.correctPassword(password, user.password))) {
-    return next(new AppError('Incorrect email or password', 404));
+    return next(new AppError('Incorrect email or password', 401));
   }
 
-  const token = signToken(user._id);
+  const token = signToken(user._id.toString());
 
   res.status(200).json({
     status: 'success',
     token,
+    data: {
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+      },
+    },
   });
 };
 
@@ -77,7 +87,45 @@ export const updateAuthUser = async (
   res: Response,
   next: NextFunction
 ) => {
-  // Update non
+  if (!req.user) {
+    return next(new AppError('You are not logged in.', 401));
+  }
+
+  if (req.body.password || req.body.passwordConfirm) {
+    return next(
+      new AppError(
+        'This route is not for password updates. Please use /update-password.',
+        400
+      )
+    );
+  }
+
+  const updatedUser = await User.findByIdAndUpdate(
+    req.user._id,
+    {
+      name: req.body.name,
+      email: req.body.email,
+    },
+    {
+      returnDocument: 'after',
+      runValidators: true,
+    }
+  );
+
+  if (!updatedUser) {
+    return next(new AppError('User not found.', 404));
+  }
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      user: {
+        id: updatedUser._id,
+        name: updatedUser.name,
+        email: updatedUser.email,
+      },
+    },
+  });
 };
 
 export const updateUserPassword = async (
@@ -85,7 +133,21 @@ export const updateUserPassword = async (
   res: Response,
   next: NextFunction
 ) => {
-  const user = await User.findById(req.user?._id).select('+password');
+  if (!req.user) {
+    return next(new AppError('You are not logged in.', 401));
+  }
+
+  if (!req.body.currentPassword) {
+    return next(new AppError('Current password is required.', 400));
+  }
+
+  if (!req.body.password || !req.body.passwordConfirm) {
+    return next(
+      new AppError('New password and password confirmation are required.', 400)
+    );
+  }
+
+  const user = await User.findById(req.user._id).select('+password');
 
   if (!user) {
     return next(new AppError('User not found', 404));
@@ -118,4 +180,19 @@ export const getAuthUser = async (
   req: Request,
   res: Response,
   next: NextFunction
-) => {};
+) => {
+  if (!req.user) {
+    return next(new AppError('You are not logged in.', 401));
+  }
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      user: {
+        id: req.user._id,
+        name: req.user.name,
+        email: req.user.email,
+      },
+    },
+  });
+};
