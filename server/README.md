@@ -2,9 +2,53 @@
 
 The Bug-Board server is the Express API for the Bug-Board full-stack bug tracking application.
 
-It is built with Node.js, Express, TypeScript, MongoDB, Mongoose, JWT, and bcrypt.
+It is built with Node.js, Express, TypeScript, MongoDB, Mongoose, JWT, bcrypt, and MongoDB Atlas.
 
-This backend is currently in active development.
+This backend is deployed and currently in active development.
+
+---
+
+## Live API
+
+Base URL:
+
+```txt
+https://bug-board.onrender.com
+```
+
+Health check:
+
+```txt
+GET https://bug-board.onrender.com/api/v1/health
+```
+
+API base path:
+
+```txt
+/api/v1
+```
+
+---
+
+## Demo Accounts
+
+The deployed API includes seeded demo data for testing authentication, protected routes, and ownership behavior.
+
+### Demo User
+
+```txt
+Email: demo@bugboard.dev
+Password: password123
+```
+
+### Second User
+
+```txt
+Email: second@bugboard.dev
+Password: password123
+```
+
+The second user is included to test resource ownership boundaries. The demo user should not be able to access the second user's private project data, and the second user should not be able to access the demo user's project data.
 
 ---
 
@@ -18,7 +62,8 @@ Provide a REST API for:
 - Bug tracking
 - Comments on bugs
 - Account/profile management
-- Future ownership and authorization rules
+- Resource ownership
+- Future admin-only user management
 
 ---
 
@@ -28,12 +73,15 @@ Provide a REST API for:
 - Express
 - TypeScript
 - MongoDB
+- MongoDB Atlas
 - Mongoose
 - JWT
 - bcrypt
 - Morgan
 - dotenv
+- CORS
 - pnpm
+- Render
 
 ---
 
@@ -43,6 +91,7 @@ Completed so far:
 
 - Express API setup
 - MongoDB/Mongoose connection
+- MongoDB Atlas database connection
 - TypeScript backend setup
 - User, project, bug, and comment models
 - User, project, bug, and comment route/controller structure
@@ -56,20 +105,23 @@ Completed so far:
 - Authenticated profile update route
 - Authenticated password update route
 - Password-changed token invalidation
+- Resource ownership checks for projects, bugs, and comments
+- Project ownership assigned server-side from authenticated users
+- Bug creation restricted to projects owned by the authenticated user
+- Comment creation restricted to bugs under projects owned by the authenticated user
+- Demo database seed script
+- API deployed to Render
 
 Current backend focus:
 
-- Resource ownership
-- Authorization checks
-- Preventing users from accessing other users' projects, bugs, and comments
+- Deployment testing
+- Frontend integration
+- API polish
+- Future admin-only user management
 
 ---
 
-## API Base Path
-
-```txt
-/api/v1
-```
+## API Resources
 
 Main API resources:
 
@@ -96,8 +148,8 @@ Authorization: Bearer <token>
 Tokens are returned from:
 
 ```txt
-POST /api/v1/auth/signup
-POST /api/v1/auth/login
+POST  /api/v1/auth/signup
+POST  /api/v1/auth/login
 PATCH /api/v1/auth/update-password
 ```
 
@@ -144,7 +196,7 @@ Expected body:
 
 ```json
 {
-  "email": "mason@example.com",
+  "email": "demo@bugboard.dev",
   "password": "password123"
 }
 ```
@@ -217,12 +269,20 @@ PATCH  /api/v1/users/:id
 DELETE /api/v1/users/:id
 ```
 
-User routes are being refined as authentication and authorization are added.
+User routes are planned as future admin-only routes.
+
+Normal user account actions are handled through the auth routes:
+
+```txt
+GET   /api/v1/auth/me
+PATCH /api/v1/auth/me
+PATCH /api/v1/auth/update-password
+```
 
 Future plan:
 
-- Limit general user management routes
-- Move self-service account updates under `/auth/me`
+- Limit general user management routes to admins
+- Keep self-service account updates under `/auth/me`
 - Add role-based access if needed
 
 ---
@@ -239,11 +299,11 @@ DELETE /api/v1/projects/:id
 
 Project routes are protected.
 
-Current/future ownership behavior:
+Ownership behavior:
 
-- Project ownership will be assigned server-side from `req.user`
-- Users should only read, update, and delete their own projects
-- Client-provided `owner` fields should not be trusted
+- Project ownership is assigned server-side from `req.user`
+- Users can only read, update, and delete their own projects
+- Client-provided `owner` fields are not trusted
 
 ---
 
@@ -259,11 +319,13 @@ DELETE /api/v1/bugs/:id
 
 Bug routes are protected.
 
-Current/future ownership behavior:
+Ownership behavior:
 
-- Bugs should belong to projects
-- Users should only access bugs for projects they own or can access
-- Client-provided ownership fields should not be trusted
+- Bugs belong to projects
+- Bug creation verifies that the project belongs to the authenticated user
+- Bug creator is assigned server-side from `req.user`
+- Users can only read, update, and delete bugs they created in the current MVP ownership model
+- Client-provided ownership fields are not trusted
 
 ---
 
@@ -279,11 +341,13 @@ DELETE /api/v1/comments/:id
 
 Comment routes are protected.
 
-Current/future ownership behavior:
+Ownership behavior:
 
-- Comments should belong to bugs
-- Comment author should be set server-side from `req.user`
-- Users should only access comments for bugs/projects they can access
+- Comments belong to bugs
+- Comment author is assigned server-side from `req.user`
+- Comment creation verifies that the bug belongs to a project owned by the authenticated user
+- Users can only read, update, and delete comments they authored in the current MVP ownership model
+- Client-provided ownership fields are not trusted
 
 ---
 
@@ -338,7 +402,7 @@ status
 priority
 severity
 project
-author
+createdBy
 ```
 
 ### Comment
@@ -350,6 +414,40 @@ body
 bug
 author
 ```
+
+---
+
+## Demo Seed Data
+
+The server includes a seed script for demo/testing data.
+
+Seeded demo users:
+
+```txt
+demo@bugboard.dev
+password123
+```
+
+```txt
+second@bugboard.dev
+password123
+```
+
+The seed data includes:
+
+- Demo users
+- Projects
+- Bugs
+- Comments
+- Ownership-separated data for testing access boundaries
+
+Run the seed script from the server directory:
+
+```bash
+pnpm seed
+```
+
+The seed script is intended for demo/development use. Do not run it automatically during deployment.
 
 ---
 
@@ -407,6 +505,7 @@ PORT=3000
 DATABASE_URL=mongodb+srv://...
 JWT_SECRET=your_jwt_secret_here
 JWT_EXPIRES_IN=1d
+CLIENT_URL=http://localhost:5173
 ```
 
 Generate a JWT secret with:
@@ -414,6 +513,8 @@ Generate a JWT secret with:
 ```bash
 openssl rand -hex 32
 ```
+
+For deployment, configure environment variables in the hosting platform instead of committing `.env`.
 
 ---
 
@@ -443,6 +544,12 @@ Run the compiled server:
 pnpm start
 ```
 
+Run the seed script:
+
+```bash
+pnpm seed
+```
+
 ---
 
 ## Scripts
@@ -451,8 +558,41 @@ pnpm start
 {
   "dev": "tsx watch src/server.ts",
   "build": "tsc",
-  "start": "node dist/server.js"
+  "start": "node dist/server.js",
+  "seed": "tsx src/seed/seed.ts"
 }
+```
+
+---
+
+## Deployment
+
+The API is deployed on Render.
+
+Live API:
+
+```txt
+https://bug-board.onrender.com
+```
+
+Health check:
+
+```txt
+GET /api/v1/health
+```
+
+Deployment setup:
+
+```txt
+Root Directory: server
+Build Command: pnpm install && pnpm build
+Start Command: pnpm start
+```
+
+Database:
+
+```txt
+MongoDB Atlas
 ```
 
 ---
@@ -461,13 +601,11 @@ pnpm start
 
 Current backend priority:
 
-1. Finish resource ownership rules
-2. Set project ownership from authenticated user
-3. Prevent access to other users' resources
-4. Validate project access before creating bugs
-5. Validate bug/project access before creating comments
-6. Refine user routes
-7. Add frontend integration support as needed
+1. Test deployed API routes
+2. Verify deployed auth and ownership flows
+3. Connect the frontend client to the deployed API
+4. Refine user routes as future admin-only routes
+5. Add additional frontend integration support as needed
 
 Important rules:
 
