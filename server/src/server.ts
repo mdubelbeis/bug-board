@@ -17,6 +17,7 @@ mongoose
   .connect(DB_CLOUD)
   .then((conn) => {
     console.log('Successful database connection');
+    console.log('Using database:', mongoose.connection.name);
     app.listen(PORT, () => {
       console.log(`Server listening on port: ${PORT}`);
     });
