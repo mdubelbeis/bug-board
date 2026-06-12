@@ -1,9 +1,18 @@
 import type { NextFunction, Request, Response } from 'express';
 import Bug from '../models/bugModel.js';
+import Project from '../models/projectModel.js';
 import AppError from '../utils/AppError.js';
 
-export const getAllBugs = async (req: Request, res: Response) => {
-  const bugs = await Bug.find();
+export const getAllBugs = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  if (!req.user) {
+    return next(new AppError('You are not logged in', 401));
+  }
+
+  const bugs = await Bug.find({ createdBy: req.user._id });
 
   res.status(200).json({
     status: 'success',
@@ -14,10 +23,34 @@ export const getAllBugs = async (req: Request, res: Response) => {
   });
 };
 
-export const createBug = async (req: Request, res: Response) => {
-  // TODO: Do not send req.body. Assign each field to an object to pass to .create()
-  // TODO: Role/Ownership - Set req.user to user._id
-  const bug = await Bug.create(req.body);
+export const createBug = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  if (!req.user) {
+    return next(new AppError('You are not logged in', 401));
+  }
+
+  const { title, description, priority, severity, project } = req.body;
+
+  const projectExists = await Project.findOne({
+    _id: project,
+    owner: req.user._id,
+  });
+
+  if (!projectExists) {
+    return next(new AppError('Project not found', 404));
+  }
+
+  const bug = await Bug.create({
+    title,
+    description,
+    priority,
+    severity,
+    project,
+    createdBy: req.user._id,
+  });
 
   res.status(201).json({
     status: 'success',
@@ -32,7 +65,13 @@ export const findBug = async (
   res: Response,
   next: NextFunction
 ) => {
-  const bug = await Bug.findById(req.params.id);
+  if (!req.user) {
+    return next(new AppError('You are not logged in', 401));
+  }
+  const bug = await Bug.findOne({
+    _id: req.params.id,
+    createdBy: req.user._id,
+  });
 
   if (!bug) {
     const err = new AppError('Bug not found', 404);
@@ -52,16 +91,34 @@ export const updateBug = async (
   res: Response,
   next: NextFunction
 ) => {
-  // TODO: Do not send req.body. Assign each field to an object to pass to .create()
-  // TODO: Role/Ownership - Set req.user to user._id
-  const bug = await Bug.findByIdAndUpdate(req.params.id, req.body, {
-    returnDocument: 'after',
-    runValidators: true,
-  });
+  if (!req.user) {
+    return next(new AppError('You are not logged in', 401));
+  }
+
+  const { title, description, status, priority, severity } = req.body;
+
+  const bug = await Bug.findOneAndUpdate(
+    {
+      _id: req.params.id,
+      createdBy: req.user._id,
+    },
+
+    {
+      title,
+      description,
+      status,
+      priority,
+      severity,
+    },
+
+    {
+      returnDocument: 'after',
+      runValidators: true,
+    }
+  );
 
   if (!bug) {
-    const err = new AppError('Bug not found', 404);
-    return next(err);
+    return next(new AppError('Bug not found', 404));
   }
 
   res.status(200).json({
@@ -77,7 +134,14 @@ export const deleteBug = async (
   res: Response,
   next: NextFunction
 ) => {
-  const bug = await Bug.findByIdAndDelete(req.params.id);
+  if (!req.user) {
+    return next(new AppError('You are not logged in', 401));
+  }
+
+  const bug = await Bug.findOneAndDelete({
+    _id: req.params.id,
+    createdBy: req.user._id,
+  });
 
   if (!bug) {
     const err = new AppError('Bug not found', 404);

@@ -9,7 +9,6 @@ import authRouter from './routes/authRoutes.js';
 import bugRouter from './routes/bugRoutes.js';
 import commentRouter from './routes/commentRoutes.js';
 import projectRouter from './routes/projectRoutes.js';
-import userRouter from './routes/userRoutes.js';
 
 const app: Express = express();
 
@@ -22,7 +21,7 @@ app.use(express.json());
 app.use('/api/v1/comments', protect, commentRouter);
 app.use('/api/v1/bugs', protect, bugRouter);
 app.use('/api/v1/projects', protect, projectRouter);
-app.use('/api/v1/users', protect, userRouter);
+// app.use('/api/v1/users', protect, userRouter); TODO: admin-only
 app.use('/api/v1/auth', authRouter);
 
 // TODO: Implement advanced routes

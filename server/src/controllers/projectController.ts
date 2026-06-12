@@ -2,8 +2,16 @@ import type { NextFunction, Request, Response } from 'express';
 import Project from '../models/projectModel.js';
 import AppError from '../utils/AppError.js';
 
-export const getAllProjects = async (req: Request, res: Response) => {
-  const projects = await Project.find();
+export const getAllProjects = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  if (!req.user) {
+    return next(new AppError('You are not logged in.', 401));
+  }
+
+  const projects = await Project.find({ owner: req.user._id });
 
   res.status(200).json({
     status: 'success',
@@ -19,7 +27,14 @@ export const findProject = async (
   res: Response,
   next: NextFunction
 ) => {
-  const project = await Project.findById(req.params.id);
+  if (!req.user) {
+    return next(new AppError('You are not logged in', 401));
+  }
+
+  const project = await Project.findOne({
+    _id: req.params.id,
+    owner: req.user._id,
+  });
 
   if (!project) {
     const err = new AppError('Project not found', 404);
@@ -34,10 +49,20 @@ export const findProject = async (
   });
 };
 
-export const createProject = async (req: Request, res: Response) => {
-  // TODO: Do not send req.body. Assign each field to an object to pass to .create()
-  // TODO: Role/Ownership - Set req.user to user._id
-  const project = await Project.create(req.body);
+export const createProject = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  if (!req.user) {
+    return next(new AppError('You are not logged in', 401));
+  }
+
+  const project = await Project.create({
+    title: req.body.title,
+    description: req.body.description,
+    owner: req.user._id,
+  });
 
   res.status(201).json({
     status: 'success',
@@ -52,16 +77,27 @@ export const updateProject = async (
   res: Response,
   next: NextFunction
 ) => {
-  // TODO: Do not send req.body. Assign each field to an object to pass to .create()
-  // TODO: Role/Ownership - Set req.user to user._id
-  const project = await Project.findByIdAndUpdate(req.params.id, req.body, {
-    returnDocument: 'after',
-    runValidators: true,
-  });
+  if (!req.user) {
+    return next(new AppError('You are not logged in', 401));
+  }
+
+  const project = await Project.findOneAndUpdate(
+    {
+      _id: req.params.id,
+      owner: req.user._id,
+    },
+    {
+      title: req.body.title,
+      description: req.body.description,
+    },
+    {
+      returnDocument: 'after',
+      runValidators: true,
+    }
+  );
 
   if (!project) {
-    const err = new AppError('Comment not found', 404);
-    return next(err);
+    return next(new AppError('Project not found', 404));
   }
 
   res.status(200).json({
@@ -77,11 +113,17 @@ export const deleteProject = async (
   res: Response,
   next: NextFunction
 ) => {
-  const project = await Project.findByIdAndDelete(req.params.id);
+  if (!req.user) {
+    return next(new AppError('You are not logged in', 401));
+  }
+
+  const project = await Project.findOneAndDelete({
+    _id: req.params.id,
+    owner: req.user._id,
+  });
 
   if (!project) {
-    const err = new AppError('Comment not found', 404);
-    return next(err);
+    return next(new AppError('Project not found', 404));
   }
 
   res.status(204).send();

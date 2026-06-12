@@ -39,7 +39,11 @@ export const signup = async (
     status: 'success',
     token,
     data: {
-      user,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+      },
     },
   });
 };
@@ -58,10 +62,12 @@ export const login = async (
     return next(err);
   }
 
-  const user = await User.findOne({ email }).select('+password');
+  const user = await User.findOne({ email: email.toLowerCase() }).select(
+    '+password'
+  );
 
   if (!user || !(await user.correctPassword(password, user.password))) {
-    return next(new AppError('Incorrect email or password', 404));
+    return next(new AppError('Incorrect email or password', 401));
   }
 
   const token = signToken(user._id.toString());
@@ -69,6 +75,13 @@ export const login = async (
   res.status(200).json({
     status: 'success',
     token,
+    data: {
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+      },
+    },
   });
 };
 
@@ -123,7 +136,21 @@ export const updateUserPassword = async (
   res: Response,
   next: NextFunction
 ) => {
-  const user = await User.findById(req.user?._id).select('+password');
+  if (!req.user) {
+    return next(new AppError('You are not logged in.', 401));
+  }
+
+  if (!req.body.currentPassword) {
+    return next(new AppError('Current password is required.', 400));
+  }
+
+  if (!req.body.password || !req.body.passwordConfirm) {
+    return next(
+      new AppError('New password and password confirmation are required.', 400)
+    );
+  }
+
+  const user = await User.findById(req.user._id).select('+password');
 
   if (!user) {
     return next(new AppError('User not found', 404));
