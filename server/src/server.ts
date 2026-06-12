@@ -11,7 +11,7 @@ const DB_CLOUD = process.env.DB_CLOUD!;
 const DB_LOCAL = process.env.DB_LOCAL!;
 
 mongoose
-  .connect(DB_LOCAL)
+  .connect(DB_CLOUD)
   .then((conn) => {
     console.log('Successful database connection');
   })
