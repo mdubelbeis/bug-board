@@ -32,6 +32,9 @@ export const signup = async (
 
   const token = signToken(user._id.toString());
 
+  user.password = '';
+  user.passwordConfirm = '';
+
   res.status(201).json({
     status: 'success',
     token,

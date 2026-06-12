@@ -36,3 +36,4 @@ build/
 *.sw?
 
 folderStructure
+client/routes.md
