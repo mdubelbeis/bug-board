@@ -14,19 +14,16 @@ const LoginPage = () => {
     const password = form.get('password');
 
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/auth/login` + `/auth/login`,
-        {
-          method: 'POST',
-          headers: {
-            'content-type': 'application/json',
-          },
-          body: JSON.stringify({
-            email: email,
-            password,
-          }),
-        }
-      );
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/auth/login`, {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      });
       const data = await response.json();
 
       if (!response.ok) {
