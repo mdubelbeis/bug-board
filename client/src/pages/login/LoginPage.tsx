@@ -42,15 +42,27 @@ const LoginPage = () => {
     }
   }
   return (
-    <>
+    <main>
       <form onSubmit={handleLogin}>
         <div>
           <label htmlFor='email'>Email</label>
-          <input type='email' name='email' id='email' />
+          <input
+            type='email'
+            name='email'
+            id='email'
+            placeholder='demo@bugboard.dev'
+            defaultValue={'demo@bugboard.dev'}
+          />
         </div>
         <div>
           <label htmlFor='password'>Password: </label>
-          <input type='password' name='password' id='password' />
+          <input
+            type='password'
+            name='password'
+            id='password'
+            placeholder='password123'
+            defaultValue={'password123'}
+          />
         </div>
         <button>Login</button>
       </form>
@@ -60,7 +72,7 @@ const LoginPage = () => {
           <span>{errors.message}</span>
         </div>
       )}
-    </>
+    </main>
   );
 };
 
