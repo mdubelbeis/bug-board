@@ -5,6 +5,7 @@ import type { ProjectData } from '../../types/project.ts';
 const CreateProjectPage = () => {
   const token = useLoaderData() as string;
   const navigate = useNavigate();
+
   async function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
 
