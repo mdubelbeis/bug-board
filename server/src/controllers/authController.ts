@@ -184,6 +184,7 @@ export const getAuthUser = async (
   if (!req.user) {
     return next(new AppError('You are not logged in.', 401));
   }
+  console.log(req);
 
   res.status(200).json({
     status: 'success',
@@ -192,6 +193,8 @@ export const getAuthUser = async (
         id: req.user._id,
         name: req.user.name,
         email: req.user.email,
+        createdAt: req.user.createdAt,
+        updatedAt: req.user.updatedAt,
       },
     },
   });
