@@ -2,9 +2,9 @@
 
 The Bug-Board server is the Express API for the Bug-Board full-stack bug tracking application.
 
-It is built with Node.js, Express, TypeScript, MongoDB, Mongoose, JWT, bcrypt, and MongoDB Atlas.
+It is built with Node.js, Express, TypeScript, MongoDB, Mongoose, JWT, bcrypt, MongoDB Atlas, and pnpm.
 
-This backend is deployed and currently in active development.
+This backend is deployed on Render and is currently in active development.
 
 ---
 
@@ -16,23 +16,29 @@ Base URL:
 https://bug-board.onrender.com
 ```
 
-Health check:
-
-```txt
-GET https://bug-board.onrender.com/api/v1/health
-```
-
 API base path:
 
 ```txt
 /api/v1
 ```
 
+Health check:
+
+```txt
+GET https://bug-board.onrender.com/api/v1/health
+```
+
+Frontend client:
+
+```txt
+https://bug-board-gilt.vercel.app
+```
+
 ---
 
 ## Demo Accounts
 
-The deployed API includes seeded demo data for testing authentication, protected routes, and ownership behavior.
+The deployed API includes seeded demo data for testing authentication, protected routes, project ownership, bug ownership, and resource access boundaries.
 
 ### Demo User
 
@@ -48,7 +54,7 @@ Email: second@bugboard.dev
 Password: password123
 ```
 
-The second user is included to test resource ownership boundaries. The demo user should not be able to access the second user's private project data, and the second user should not be able to access the demo user's project data.
+The second user is included to test ownership boundaries. The demo user should not be able to access the second user's private project data, and the second user should not be able to access the demo user's project data.
 
 ---
 
@@ -90,9 +96,11 @@ Provide a REST API for:
 Completed so far:
 
 - Express API setup
+- TypeScript backend setup
 - MongoDB/Mongoose connection
 - MongoDB Atlas database connection
-- TypeScript backend setup
+- Production database connection using `DB_CLOUD`
+- Local database connection using `DB_LOCAL`
 - User, project, bug, and comment models
 - User, project, bug, and comment route/controller structure
 - Centralized error handling
@@ -110,14 +118,17 @@ Completed so far:
 - Bug creation restricted to projects owned by the authenticated user
 - Comment creation restricted to bugs under projects owned by the authenticated user
 - Demo database seed script
+- CORS configured for deployed frontend
 - API deployed to Render
+- Frontend connected through deployed Vercel client
 
 Current backend focus:
 
 - Deployment testing
-- Frontend integration
-- API polish
+- Frontend integration polish
+- API response consistency
 - Future admin-only user management
+- Comment integration on the frontend
 
 ---
 
@@ -305,6 +316,15 @@ Ownership behavior:
 - Users can only read, update, and delete their own projects
 - Client-provided `owner` fields are not trusted
 
+Example create body:
+
+```json
+{
+  "title": "Portfolio Redesign",
+  "description": "Track bugs and tasks for a portfolio rebuild."
+}
+```
+
 ---
 
 ## Bug Routes
@@ -324,8 +344,47 @@ Ownership behavior:
 - Bugs belong to projects
 - Bug creation verifies that the project belongs to the authenticated user
 - Bug creator is assigned server-side from `req.user`
-- Users can only read, update, and delete bugs they created in the current MVP ownership model
+- Users can only read, update, and delete bugs they are authorized to access
 - Client-provided ownership fields are not trusted
+
+Example create body:
+
+```json
+{
+  "title": "Login button does not submit",
+  "description": "Clicking the login button does not send the form.",
+  "status": "OPEN",
+  "priority": "HIGH",
+  "severity": "MAJOR",
+  "project": "PROJECT_ID_HERE"
+}
+```
+
+Valid bug status values:
+
+```txt
+OPEN
+IN_PROGRESS
+RESOLVED
+CLOSED
+```
+
+Valid priority values:
+
+```txt
+LOW
+MEDIUM
+HIGH
+CRITICAL
+```
+
+Valid severity values:
+
+```txt
+MINOR
+MAJOR
+BLOCKING
+```
 
 ---
 
@@ -346,8 +405,17 @@ Ownership behavior:
 - Comments belong to bugs
 - Comment author is assigned server-side from `req.user`
 - Comment creation verifies that the bug belongs to a project owned by the authenticated user
-- Users can only read, update, and delete comments they authored in the current MVP ownership model
+- Users can only read, update, and delete comments they are authorized to access
 - Client-provided ownership fields are not trusted
+
+Example create body:
+
+```json
+{
+  "body": "I reproduced this issue on the deployed frontend.",
+  "bug": "BUG_ID_HERE"
+}
+```
 
 ---
 
@@ -493,20 +561,74 @@ See the main docs folder for additional error handling notes.
 
 ---
 
+## CORS
+
+The deployed API allows requests from the deployed frontend client.
+
+Production frontend origin:
+
+```txt
+https://bug-board-gilt.vercel.app
+```
+
+Local frontend origin:
+
+```txt
+http://localhost:5173
+```
+
+Recommended CORS setup:
+
+```ts
+const allowedOrigins: string[] = [
+  process.env.CLIENT_URL,
+  'http://localhost:5173',
+].filter((origin): origin is string => Boolean(origin));
+
+app.use(
+  cors({
+    origin: allowedOrigins,
+  })
+);
+```
+
+In production, `CLIENT_URL` should be set on Render:
+
+```env
+CLIENT_URL=https://bug-board-gilt.vercel.app
+```
+
+Do not include a trailing slash.
+
+---
+
 ## Environment Variables
 
-Create a `.env` file in the server directory.
+Create a `.env` file in the server directory for local development.
 
-Required variables:
+Required local variables:
 
 ```env
 NODE_ENV=development
 PORT=3000
-DATABASE_URL=mongodb+srv://...
+DB_LOCAL=mongodb://127.0.0.1:27017/bug-board
+DB_CLOUD=mongodb+srv://...
 JWT_SECRET=your_jwt_secret_here
 JWT_EXPIRES_IN=1d
 CLIENT_URL=http://localhost:5173
 ```
+
+Production variables configured on Render:
+
+```env
+NODE_ENV=production
+DB_CLOUD=mongodb+srv://...
+JWT_SECRET=your_jwt_secret_here
+JWT_EXPIRES_IN=1d
+CLIENT_URL=https://bug-board-gilt.vercel.app
+```
+
+Render does not need `DB_LOCAL`.
 
 Generate a JWT secret with:
 
@@ -515,6 +637,39 @@ openssl rand -hex 32
 ```
 
 For deployment, configure environment variables in the hosting platform instead of committing `.env`.
+
+---
+
+## Database Connection
+
+The server chooses the database connection based on `NODE_ENV`.
+
+Production should use:
+
+```txt
+DB_CLOUD
+```
+
+Local development should use:
+
+```txt
+DB_LOCAL
+```
+
+Example connection selection:
+
+```ts
+const DB =
+  process.env.NODE_ENV === 'production'
+    ? process.env.DB_CLOUD
+    : process.env.DB_LOCAL;
+
+if (!DB) {
+  throw new Error('Database connection string is not defined');
+}
+```
+
+This prevents the deployed Render API from trying to connect to a local MongoDB instance.
 
 ---
 
@@ -595,6 +750,40 @@ Database:
 MongoDB Atlas
 ```
 
+Required Render environment variables:
+
+```env
+NODE_ENV=production
+DB_CLOUD=mongodb+srv://...
+JWT_SECRET=your_jwt_secret_here
+JWT_EXPIRES_IN=1d
+CLIENT_URL=https://bug-board-gilt.vercel.app
+```
+
+---
+
+## Frontend Integration
+
+The frontend is deployed on Vercel:
+
+```txt
+https://bug-board-gilt.vercel.app
+```
+
+The frontend should use the deployed API base URL:
+
+```env
+VITE_API_BASE_URL=https://bug-board.onrender.com/api/v1
+```
+
+This allows frontend requests such as:
+
+```txt
+POST https://bug-board.onrender.com/api/v1/auth/login
+GET  https://bug-board.onrender.com/api/v1/projects
+GET  https://bug-board.onrender.com/api/v1/bugs
+```
+
 ---
 
 ## Development Notes
@@ -603,9 +792,10 @@ Current backend priority:
 
 1. Test deployed API routes
 2. Verify deployed auth and ownership flows
-3. Connect the frontend client to the deployed API
+3. Continue frontend integration
 4. Refine user routes as future admin-only routes
-5. Add additional frontend integration support as needed
+5. Add comments to frontend bug detail pages
+6. Improve API response consistency as the app grows
 
 Important rules:
 
