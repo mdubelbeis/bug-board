@@ -3,7 +3,7 @@
   top: 0;
   z-index: 10;
   border-bottom: 1px solid #e2e8f0;
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.92);
   backdrop-filter: blur(0.75rem);
 }
 
@@ -38,51 +38,42 @@
 }
 
 .link,
-.loginLink {
+.logoutButton {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   padding: 0.55rem 0.75rem;
   border-radius: 0.55rem;
   color: #475569;
+  font: inherit;
   font-size: 0.95rem;
   font-weight: 700;
   text-decoration: none;
 }
 
-.link:hover,
-.loginLink:hover {
+.link:hover {
   background: #f1f5f9;
   color: #0f172a;
 }
 
-.loginLink {
-  border: 1px solid #cbd5e1;
-  background: #ffffff;
-  color: #334155;
-}
-
-.loginLink:hover {
-  border-color: #93c5fd;
-  background: #eff6ff;
-  color: #2563eb;
-}
-
 .active {
-  color: #2563eb;
-}
-
-.link.active {
-  background: #eff6ff;
-}
-
-.loginLink.active {
-  border-color: #93c5fd;
   background: #eff6ff;
   color: #2563eb;
 }
 
-@media (max-width: 480px) {
+.logoutButton {
+  border: 1px solid #fecaca;
+  background: #fff7f7;
+  color: #b91c1c;
+  cursor: pointer;
+}
+
+.logoutButton:hover {
+  background: #fef2f2;
+  border-color: #fca5a5;
+}
+
+@media (max-width: 720px) {
   .nav {
     flex-direction: column;
     align-items: stretch;
@@ -91,12 +82,11 @@
   }
 
   .list {
-    justify-content: space-between;
+    flex-wrap: wrap;
   }
 
   .link,
-  .loginLink {
+  .logoutButton {
     flex: 1;
-    padding-inline: 0.6rem;
   }
 }
