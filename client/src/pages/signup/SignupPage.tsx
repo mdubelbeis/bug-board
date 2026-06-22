@@ -61,8 +61,8 @@ const SignupPage = () => {
   }
 
   return (
-    <main className={styles.authPage}>
-      <section className={styles.authCard}>
+    <section className={styles.authPage}>
+      <div className={styles.authCard}>
         <div className={styles.authHeader}>
           <p className={styles.eyebrow}>Bug-Board</p>
           <h1>Create your account</h1>
@@ -125,8 +125,8 @@ const SignupPage = () => {
             </button>
           </div>
         </form>
-      </section>
-    </main>
+      </div>
+    </section>
   );
 };
 
