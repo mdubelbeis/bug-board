@@ -1,4 +1,12 @@
 .main {
-  max-width: 80%;
-  background-color: var();
+  min-height: calc(100vh - 4rem);
+  background:
+    radial-gradient(circle at top left, rgba(37, 99, 235, 0.08), transparent 28rem),
+    linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+  color: #0f172a;
+}
+
+.main > * {
+  width: min(100% - 2rem, 72rem);
+  margin-inline: auto;
 }

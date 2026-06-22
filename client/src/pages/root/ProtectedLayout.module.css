@@ -1,0 +1,17 @@
+.appShell {
+  min-height: 100vh;
+  background: #f8fafc;
+  color: #0f172a;
+}
+
+.mainContent {
+  width: min(100% - 2rem, 72rem);
+  margin: 0 auto;
+  padding: 2rem 0 3rem;
+}
+
+@media (min-width: 768px) {
+  .mainContent {
+    padding: 2.5rem 0 4rem;
+  }
+}
