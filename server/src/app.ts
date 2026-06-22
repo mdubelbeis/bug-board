@@ -17,9 +17,14 @@ if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 
+const allowedOrigins: string[] = [
+  process.env.CLIENT_URL,
+  'http://localhost:5173',
+].filter((origin): origin is string => Boolean(origin));
+
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || 'http://localhost:5173',
+    origin: allowedOrigins,
   })
 );
 
