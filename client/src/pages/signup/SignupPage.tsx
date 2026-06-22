@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import styles from './SignupPage.module.css';
 
 const SignupPage = () => {
   const [fieldErrors, setFieldErrors] = useState<
@@ -37,6 +38,7 @@ const SignupPage = () => {
           passwordConfirm,
         }),
       });
+
       const data = await response.json();
 
       if (data.errors) {
@@ -49,7 +51,7 @@ const SignupPage = () => {
 
       if (data) {
         localStorage.setItem('token', data.token);
-        navigate('/dashboard', {});
+        navigate('/dashboard');
       }
     } catch (err) {
       if (err instanceof Error) {
@@ -57,47 +59,75 @@ const SignupPage = () => {
       }
     }
   }
+
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label htmlFor='name'>Name: </label>
-        <input type='text' name='name' id='name' required placeholder='Enter your name' />
+    <section className={styles.authPage}>
+      <div className={styles.authCard}>
+        <div className={styles.authHeader}>
+          <p className={styles.eyebrow}>Bug-Board</p>
+          <h1>Create your account</h1>
+          <p>Start tracking projects, bugs, priorities, and updates.</p>
+        </div>
+
+        <form className={styles.authForm} onSubmit={handleSubmit}>
+          <div className={styles.formGroup}>
+            <label htmlFor='name'>Name</label>
+            <input type='text' name='name' id='name' required placeholder='Enter your name' />
+          </div>
+
+          <div className={styles.formGroup}>
+            <label htmlFor='email'>Email</label>
+            <input type='email' name='email' id='email' required placeholder='Enter your email' />
+          </div>
+
+          <div className={styles.formGroup}>
+            <label htmlFor='password'>Password</label>
+            <input
+              type='password'
+              name='password'
+              id='password'
+              required
+              placeholder='Enter a password'
+            />
+          </div>
+
+          <div className={styles.formGroup}>
+            <label htmlFor='password-confirm'>Confirm Password</label>
+            <input
+              type='password'
+              name='password-confirm'
+              id='password-confirm'
+              required
+              placeholder='Enter your password again'
+            />
+          </div>
+
+          {errors && fieldErrors.length === 0 && (
+            <p className={styles.errorMessage}>{`${errors.title}${errors.message}`}</p>
+          )}
+
+          {fieldErrors.length > 0 && (
+            <div className={styles.errorList}>
+              {fieldErrors.map((error) => (
+                <p key={`${error.field}-${error.message}`}>
+                  {`${error.message.slice(0, 1).toUpperCase()}${error.message.slice(1)}`}
+                </p>
+              ))}
+            </div>
+          )}
+
+          <div className={styles.buttonGroup}>
+            <button className={styles.secondaryButton} type='reset'>
+              Reset
+            </button>
+            <button className={styles.primaryButton} type='submit'>
+              Sign up
+            </button>
+          </div>
+        </form>
       </div>
-      <div>
-        <label htmlFor='email'>Email: </label>
-        <input type='email' name='email' id='email' required placeholder='Enter your email' />
-      </div>
-      <div>
-        <label htmlFor='password'>Password: </label>
-        <input
-          type='password'
-          name='password'
-          id='password'
-          required
-          placeholder='Enter a password'
-        />
-      </div>
-      <div>
-        <label htmlFor='password-confirm'>Confirm Password: </label>
-        <input
-          type='password'
-          name='password-confirm'
-          id='password-confirm'
-          required
-          placeholder='Enter your password again'
-        />
-      </div>
-      <div>
-        <button type='reset'>Reset</button>
-        <button type='submit'>Signup</button>
-      </div>
-      {errors && fieldErrors.length === 0 && <p>{`${errors.title}${errors.message}`}</p>}
-      {fieldErrors.map((error) => (
-        <p
-          key={error.message}
-        >{`${error.message.slice(0, 1).toUpperCase()}${error.message.slice(1)}`}</p>
-      ))}
-    </form>
+    </section>
   );
 };
+
 export default SignupPage;

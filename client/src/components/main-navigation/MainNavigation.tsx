@@ -1,30 +1,71 @@
-import { Link } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 
-import classes from './MainNaviation.module.css';
+import styles from './MainNavigation.module.css';
 
 const MainNavigation = () => {
+  const navigate = useNavigate();
+
   function handleLogout() {
     localStorage.removeItem('token');
+    navigate('/');
   }
 
   return (
-    <header className={classes.header}>
-      <nav>
-        <ul className={classes.list}>
+    <header className={styles.header}>
+      <nav className={styles.nav} aria-label='Main navigation'>
+        <NavLink className={styles.logo} to='/dashboard'>
+          Bug-Board
+        </NavLink>
+
+        <ul className={styles.list}>
           <li>
-            <Link to='/dashboard'>Dashboard</Link>
+            <NavLink
+              to='/dashboard'
+              className={({ isActive }) =>
+                isActive ? `${styles.link} ${styles.active}` : styles.link
+              }
+            >
+              Dashboard
+            </NavLink>
           </li>
+
           <li>
-            <Link to='/projects'>Projects</Link>
+            <NavLink
+              to='/projects'
+              className={({ isActive }) =>
+                isActive ? `${styles.link} ${styles.active}` : styles.link
+              }
+            >
+              Projects
+            </NavLink>
           </li>
+
           <li>
-            <Link to='/bugs'>Bugs</Link>
+            <NavLink
+              to='/bugs'
+              className={({ isActive }) =>
+                isActive ? `${styles.link} ${styles.active}` : styles.link
+              }
+            >
+              Bugs
+            </NavLink>
           </li>
+
           <li>
-            <Link to='/account'>Account</Link>
+            <NavLink
+              to='/account'
+              className={({ isActive }) =>
+                isActive ? `${styles.link} ${styles.active}` : styles.link
+              }
+            >
+              Account
+            </NavLink>
           </li>
-          <li onClick={handleLogout}>
-            <Link to='/'>Logout</Link>
+
+          <li>
+            <button className={styles.logoutButton} type='button' onClick={handleLogout}>
+              Logout
+            </button>
           </li>
         </ul>
       </nav>

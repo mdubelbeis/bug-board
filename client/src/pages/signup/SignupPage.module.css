@@ -1,0 +1,130 @@
+.authPage {
+  min-height: calc(100vh - 4rem);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.authCard {
+  width: min(100%, 30rem);
+  padding: 2rem;
+  border: 1px solid #d7dce3;
+  border-radius: 1rem;
+  background: #ffffff;
+  box-shadow: 0 1rem 2.5rem rgba(15, 23, 42, 0.08);
+}
+
+.authHeader {
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.authHeader h1 {
+  margin: 0;
+  font-size: 2rem;
+  line-height: 1.1;
+  color: #0f172a;
+}
+
+.authHeader p {
+  margin: 0.5rem 0 0;
+  color: #64748b;
+}
+
+.eyebrow {
+  margin: 0 0 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #2563eb;
+}
+
+.authForm {
+  display: grid;
+  gap: 1rem;
+}
+
+.formGroup {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.formGroup label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #334155;
+}
+
+.formGroup input {
+  width: 100%;
+  padding: 0.75rem 0.85rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.6rem;
+  font: inherit;
+}
+
+.formGroup input:focus {
+  outline: 2px solid #93c5fd;
+  border-color: #2563eb;
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.primaryButton,
+.secondaryButton {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border-radius: 0.6rem;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.primaryButton {
+  border: 1px solid #2563eb;
+  background: #2563eb;
+  color: #ffffff;
+}
+
+.primaryButton:hover {
+  background: #1d4ed8;
+}
+
+.secondaryButton {
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  color: #334155;
+}
+
+.secondaryButton:hover {
+  background: #f8fafc;
+}
+
+.errorMessage,
+.errorList {
+  padding: 0.75rem 0.85rem;
+  border: 1px solid #fecaca;
+  border-radius: 0.6rem;
+  background: #fef2f2;
+  color: #b91c1c;
+  font-size: 0.9rem;
+}
+
+.errorMessage {
+  margin: 0;
+}
+
+.errorList {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.errorList p {
+  margin: 0;
+}

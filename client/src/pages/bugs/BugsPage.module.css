@@ -1,12 +1,9 @@
-.dashboard {
+.bugsPage {
   display: grid;
   gap: 1.5rem;
 }
 
 .pageHeader {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
   padding: 1.5rem;
   border: 1px solid #d7dce3;
   border-radius: 1rem;
@@ -24,6 +21,7 @@
 .pageHeader p {
   margin: 0.5rem 0 0;
   color: #64748b;
+  line-height: 1.5;
 }
 
 .eyebrow {
@@ -35,57 +33,20 @@
   color: #2563eb;
 }
 
-.headerActions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-}
-
-.primaryLink,
-.secondaryLink {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.7rem 1rem;
-  border-radius: 0.6rem;
-  font-weight: 700;
-  text-decoration: none;
-}
-
-.primaryLink {
-  border: 1px solid #2563eb;
-  background: #2563eb;
-  color: #ffffff;
-}
-
-.primaryLink:hover {
-  background: #1d4ed8;
-}
-
-.secondaryLink {
-  border: 1px solid #cbd5e1;
-  background: #ffffff;
-  color: #334155;
-}
-
-.secondaryLink:hover {
-  background: #f8fafc;
-}
-
-.statsGrid {
+.summaryGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
   gap: 1rem;
 }
 
-.statCard {
+.summaryCard {
   padding: 1.25rem;
   border: 1px solid #d7dce3;
   border-radius: 1rem;
   background: #ffffff;
 }
 
-.statCard span {
+.summaryCard span {
   display: block;
   margin-bottom: 0.4rem;
   color: #64748b;
@@ -93,16 +54,11 @@
   font-weight: 600;
 }
 
-.statCard strong {
+.summaryCard strong {
   display: block;
   font-size: 2rem;
   line-height: 1;
   color: #0f172a;
-}
-
-.contentGrid {
-  display: grid;
-  gap: 1.5rem;
 }
 
 .panel {
@@ -113,10 +69,6 @@
 }
 
 .panelHeader {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 1rem;
   margin-bottom: 1rem;
 }
 
@@ -130,18 +82,7 @@
   color: #64748b;
 }
 
-.panelHeader a {
-  color: #2563eb;
-  font-weight: 700;
-  text-decoration: none;
-  white-space: nowrap;
-}
-
-.panelHeader a:hover {
-  text-decoration: underline;
-}
-
-.cardList {
+.bugList {
   display: grid;
   gap: 1rem;
   margin: 0;
@@ -149,7 +90,7 @@
   list-style: none;
 }
 
-.itemCard {
+.bugCard {
   display: grid;
   gap: 1rem;
   padding: 1rem;
@@ -158,22 +99,58 @@
   background: #f8fafc;
 }
 
-.itemCard h3 {
+.bugHeader {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.badgeRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.statusBadge,
+.priorityBadge,
+.severityBadge {
+  display: inline-flex;
+  padding: 0.25rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+.statusBadge {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.priorityBadge {
+  background: #ffedd5;
+  color: #c2410c;
+}
+
+.severityBadge {
+  background: #ede9fe;
+  color: #6d28d9;
+}
+
+.bugCard h3 {
   margin: 0;
   color: #0f172a;
 }
 
-.itemCard p {
-  margin: 0.4rem 0 0;
+.bugCard p {
+  margin: 0.45rem 0 0;
   color: #64748b;
   line-height: 1.5;
 }
 
 .metaRow {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
+  flex-direction: column;
+  gap: 0.5rem;
   font-size: 0.9rem;
 }
 
@@ -191,42 +168,21 @@
   text-decoration: underline;
 }
 
-.badgeRow {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-bottom: 0.75rem;
-}
-
-.statusBadge,
-.priorityBadge {
-  display: inline-flex;
-  padding: 0.25rem 0.55rem;
-  border-radius: 999px;
-  font-size: 0.75rem;
-  font-weight: 700;
-}
-
-.statusBadge {
-  background: #dbeafe;
-  color: #1d4ed8;
-}
-
-.priorityBadge {
-  background: #ffedd5;
-  color: #c2410c;
-}
-
 .emptyState {
-  padding: 1.25rem;
+  padding: 2rem;
   border: 1px dashed #cbd5e1;
   border-radius: 0.85rem;
   background: #f8fafc;
   text-align: center;
 }
 
+.emptyState h3 {
+  margin: 0;
+  color: #0f172a;
+}
+
 .emptyState p {
-  margin: 0 0 0.75rem;
+  margin: 0.5rem 0 1rem;
   color: #64748b;
 }
 
@@ -240,14 +196,10 @@
   text-decoration: underline;
 }
 
-@media (min-width: 900px) {
-  .pageHeader {
+@media (min-width: 640px) {
+  .metaRow {
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-  }
-
-  .contentGrid {
-    grid-template-columns: 1fr 1fr;
   }
 }

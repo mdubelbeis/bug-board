@@ -1,35 +1,44 @@
+import { Link } from 'react-router-dom';
+import styles from './NotFoundPage.module.css';
+
 const NotFoundPage = () => {
   return (
-    <main>
-      <section>
-        <h1>404 - Page not found</h1>
+    <main className={styles.notFoundPage}>
+      <section className={styles.heroCard}>
+        <p className={styles.errorCode}>404</p>
+
+        <h1>Page not found</h1>
 
         <p>
           Sorry, we couldn’t find the page you were looking for. The link may be broken, the page
           may have moved, or you may not have access to it.
         </p>
 
-        <div>
-          <a href='/'>Go Home</a>
-          <a href='/dashboard'>Back to Dashboard</a>
+        <div className={styles.actions}>
+          <Link className={styles.primaryLink} to='/'>
+            Go Home
+          </Link>
+          <Link className={styles.secondaryLink} to='/dashboard'>
+            Back to Dashboard
+          </Link>
         </div>
       </section>
 
-      <section>
+      <section className={styles.linksCard}>
         <h2>Helpful links</h2>
 
         <ul>
           <li>
-            <a href='/projects'>View Projects</a>
+            <Link to='/projects'>View Projects</Link>
           </li>
           <li>
-            <a href='/bugs'>View Bugs</a>
+            <Link to='/bugs'>View Bugs</Link>
           </li>
           <li>
-            <a href='/account'>Account Settings</a>
+            <Link to='/account'>Account Settings</Link>
           </li>
           <li>
-            <a href='/login'>Log In</a>
+            <Link to='/login'>Log In</Link>
           </li>
         </ul>
       </section>

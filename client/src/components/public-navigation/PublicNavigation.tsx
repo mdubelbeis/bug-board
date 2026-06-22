@@ -1,17 +1,48 @@
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
-import classes from './PublicNavigation.module.css';
+import styles from './PublicNavigation.module.css';
 
 const PublicNavigation = () => {
   return (
-    <header className={classes.header}>
-      <nav>
-        <ul className={classes.list}>
+    <header className={styles.header}>
+      <nav className={styles.nav} aria-label='Public navigation'>
+        <NavLink className={styles.logo} to='/'>
+          Bug-Board
+        </NavLink>
+
+        <ul className={styles.list}>
           <li>
-            <Link to='/signup'>Signup</Link>
+            <NavLink
+              to='/'
+              className={({ isActive }) =>
+                isActive ? `${styles.link} ${styles.active}` : styles.link
+              }
+              end
+            >
+              Home
+            </NavLink>
           </li>
+
           <li>
-            <Link to='/login'>Login</Link>
+            <NavLink
+              to='/signup'
+              className={({ isActive }) =>
+                isActive ? `${styles.link} ${styles.active}` : styles.link
+              }
+            >
+              Sign up
+            </NavLink>
+          </li>
+
+          <li>
+            <NavLink
+              to='/login'
+              className={({ isActive }) =>
+                isActive ? `${styles.loginLink} ${styles.active}` : styles.loginLink
+              }
+            >
+              Log in
+            </NavLink>
           </li>
         </ul>
       </nav>
