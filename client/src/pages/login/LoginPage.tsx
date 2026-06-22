@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import styles from './LoginPage.module.css';
 
 const LoginPage = () => {
   const [errors, setErrors] = useState<{ title: string; message: string } | null>(null);
@@ -8,6 +9,7 @@ const LoginPage = () => {
   async function handleLogin(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
     setErrors(null);
+
     const form = new FormData(e.currentTarget);
 
     const email = form.get('email');
@@ -24,6 +26,7 @@ const LoginPage = () => {
           password,
         }),
       });
+
       const data = await response.json();
 
       if (!response.ok) {
@@ -32,8 +35,7 @@ const LoginPage = () => {
 
       if (data) {
         localStorage.setItem('token', data.token);
-
-        navigate('/dashboard', {});
+        navigate('/dashboard');
       }
     } catch (err) {
       if (err instanceof Error) {
@@ -41,38 +43,54 @@ const LoginPage = () => {
       }
     }
   }
+
   return (
-    <main>
-      <form onSubmit={handleLogin}>
-        <div>
-          <label htmlFor='email'>Email</label>
-          <input
-            type='email'
-            name='email'
-            id='email'
-            placeholder='demo@bugboard.dev'
-            defaultValue={'demo@bugboard.dev'}
-          />
+    <section className={styles.authPage}>
+      <div className={styles.authCard}>
+        <div className={styles.authHeader}>
+          <p className={styles.eyebrow}>Bug-Board</p>
+          <h1>Welcome back</h1>
+          <p>Log in to view your dashboard, projects, bugs, and account.</p>
         </div>
-        <div>
-          <label htmlFor='password'>Password: </label>
-          <input
-            type='password'
-            name='password'
-            id='password'
-            placeholder='password123'
-            defaultValue={'password123'}
-          />
-        </div>
-        <button>Login</button>
-      </form>
-      {errors && (
-        <div>
-          <span>{errors.title}</span>
-          <span>{errors.message}</span>
-        </div>
-      )}
-    </main>
+
+        <form className={styles.authForm} onSubmit={handleLogin}>
+          <div className={styles.formGroup}>
+            <label htmlFor='email'>Email</label>
+            <input
+              type='email'
+              name='email'
+              id='email'
+              placeholder='demo@bugboard.dev'
+              defaultValue='demo@bugboard.dev'
+              required
+            />
+          </div>
+
+          <div className={styles.formGroup}>
+            <label htmlFor='password'>Password</label>
+            <input
+              type='password'
+              name='password'
+              id='password'
+              placeholder='password123'
+              defaultValue='password123'
+              required
+            />
+          </div>
+
+          {errors && (
+            <div className={styles.errorMessage}>
+              <span>{errors.title}</span>
+              <span>{errors.message}</span>
+            </div>
+          )}
+
+          <button className={styles.primaryButton} type='submit'>
+            Log in
+          </button>
+        </form>
+      </div>
+    </section>
   );
 };
 
