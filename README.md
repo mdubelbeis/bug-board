@@ -2,15 +2,21 @@
 
 Bug-Board is a full-stack bug tracking application built with React, Express, TypeScript, and MongoDB.
 
-The goal of Bug-Board is to provide a simple project-based bug tracking workflow where users can create projects, track bugs, update issue status, and manage comments.
+The goal of Bug-Board is to provide a simple project-based bug tracking workflow where users can create projects, track bugs, manage issue status, and work with protected user-owned data.
 
-The backend API is deployed and the frontend client is currently in development.
+The backend API is deployed on Render, the frontend client is deployed on Vercel, and the application is currently in active development.
 
 ---
 
-## Live API
+## Live App
 
-Base URL:
+Frontend:
+
+```txt
+https://bug-board-gilt.vercel.app
+```
+
+Backend API:
 
 ```txt
 https://bug-board.onrender.com
@@ -30,20 +36,9 @@ API base path:
 
 ---
 
-## API Testing
-
-The deployed Bug-Board API can be tested with the included Postman collection.
-
-- Live API: https://bug-board.onrender.com
-- Health Check: https://bug-board.onrender.com/api/v1/health
-- Demo User: demo@bugboard.dev / password123
-- Second User: second@bugboard.dev / password123
-
----
-
 ## Demo Accounts
 
-The deployed API includes seeded demo data for testing authentication, protected routes, and ownership behavior.
+The deployed app includes seeded demo data for testing authentication, protected routes, project ownership, and bug workflows.
 
 ### Demo User
 
@@ -59,7 +54,7 @@ Email: second@bugboard.dev
 Password: password123
 ```
 
-The second user exists to test resource ownership boundaries. Each user should only be able to access their own projects and allowed related resources.
+The second user exists to test resource ownership boundaries. Each user should only be able to access their own projects, bugs, and allowed related resources.
 
 ---
 
@@ -74,9 +69,11 @@ Build a portfolio-ready full-stack application that demonstrates:
 - Resource ownership and authorization checks
 - MongoDB/Mongoose data modeling
 - React frontend routing and page structure
-- Project, bug, and comment workflows
-- Real-world full-stack application architecture
-- Deployed backend API with MongoDB Atlas
+- Public and protected route layouts
+- Project and bug workflows
+- Frontend/backend integration
+- Deployed full-stack application architecture
+- MongoDB Atlas production database usage
 
 ---
 
@@ -88,6 +85,8 @@ Build a portfolio-ready full-stack application that demonstrates:
 - TypeScript backend setup
 - MongoDB/Mongoose connection
 - MongoDB Atlas database connection
+- Production database connection using `DB_CLOUD`
+- Local database connection using `DB_LOCAL`
 - User, project, bug, and comment models
 - User, project, bug, and comment route/controller structure
 - Centralized error handling
@@ -106,23 +105,41 @@ Build a portfolio-ready full-stack application that demonstrates:
 - Comment creation restricted to bugs under projects owned by the authenticated user
 - Demo database seed script
 - Backend API deployed to Render
+- Frontend client deployed to Vercel
+- CORS configured for frontend/backend communication
+- Vercel SPA rewrite configured for React Router
+- Login/signup connected to deployed API
+- Protected frontend routes
+- Dashboard page
+- Projects page
+- Project detail page
+- Create project page
+- Bugs page
+- Bug detail page
+- Create bug page
+- Account page
+- Not found page
+- CSS Modules styling across core pages
 
 ### Current Focus
 
-- React frontend implementation
-- Frontend routing
-- Public and protected page layouts
-- Login/signup UI
-- Dashboard and project pages
-- Connecting the frontend client to the deployed API
+- UI polish
+- Better loading and error states
+- Improved invalid/expired token handling
+- Comment integration on bug detail pages
+- Project-specific bug summaries
+- Account profile update flow
+- Password update flow
 
-### Future Backend Work
+### Future Work
 
 - Admin-only user management routes
 - Role-based access if needed
 - Search and filtering
 - Pagination
 - Project deletion cleanup strategy for related bugs/comments
+- Bug status update controls
+- Comment creation from the frontend
 - Additional production hardening
 
 ---
@@ -136,6 +153,7 @@ Build a portfolio-ready full-stack application that demonstrates:
 - TypeScript
 - React Router
 - CSS Modules
+- Vercel
 
 ### Backend
 
@@ -148,17 +166,17 @@ Build a portfolio-ready full-stack application that demonstrates:
 - JWT
 - bcrypt
 - CORS
+- Morgan
+- Render
 
-### Tools & Deployment
+### Tools
 
 - pnpm
 - Postman
 - VS Code
 - Prettier
 - ESLint
-- Morgan
 - Git/GitHub
-- Render
 - MongoDB Atlas
 
 ---
@@ -185,7 +203,7 @@ bug-board/
 
 ## Frontend Routes
 
-Planned frontend route structure:
+Current frontend route structure:
 
 ```txt
 /                              Landing page
@@ -197,11 +215,42 @@ Planned frontend route structure:
 /projects/new                  Create project
 /projects/:projectId           Project details
 /projects/:projectId/bugs/new  Create bug
+/bugs                          Bugs list
 /bugs/:bugId                   Bug details
 
 /account                       Account page
 *                              Not found page
 ```
+
+---
+
+## Frontend Route Layouts
+
+The client uses React Router layouts to separate public pages from protected app pages.
+
+```txt
+RootLayout
+  PublicLayout
+    LandingPage
+    LoginPage
+    SignupPage
+
+  ProtectedLayout
+    DashboardPage
+    ProjectsPage
+    CreateProjectPage
+    ProjectDetailPage
+    BugsPage
+    BugDetailPage
+    CreateBugPage
+    AccountPage
+
+  NotFoundPage
+```
+
+Protected routes check for a JWT token before loading protected app data.
+
+Frontend route protection improves the user experience, but backend authentication and authorization still provide the real data protection.
 
 ---
 
@@ -231,33 +280,23 @@ More API details are documented in the server README.
 
 ---
 
-## API Testing Flow
+## API Testing
 
-A basic Postman test flow:
+The deployed Bug-Board API can be tested with the included Postman collection.
+
+Useful URLs:
 
 ```txt
-GET  /api/v1/health
+Live API:     https://bug-board.onrender.com
+Health Check: https://bug-board.onrender.com/api/v1/health
+Frontend:     https://bug-board-gilt.vercel.app
+```
 
-POST /api/v1/auth/login
-GET  /api/v1/auth/me
+Demo credentials:
 
-GET  /api/v1/projects
-POST /api/v1/projects
-GET  /api/v1/projects/:id
-PATCH /api/v1/projects/:id
-DELETE /api/v1/projects/:id
-
-GET  /api/v1/bugs
-POST /api/v1/bugs
-GET  /api/v1/bugs/:id
-PATCH /api/v1/bugs/:id
-DELETE /api/v1/bugs/:id
-
-GET  /api/v1/comments
-POST /api/v1/comments
-GET  /api/v1/comments/:id
-PATCH /api/v1/comments/:id
-DELETE /api/v1/comments/:id
+```txt
+demo@bugboard.dev / password123
+second@bugboard.dev / password123
 ```
 
 Protected requests require:
@@ -265,6 +304,118 @@ Protected requests require:
 ```txt
 Authorization: Bearer <token>
 ```
+
+---
+
+## API Testing Flow
+
+A basic Postman test flow:
+
+```txt
+GET   /api/v1/health
+
+POST  /api/v1/auth/login
+GET   /api/v1/auth/me
+
+GET   /api/v1/projects
+POST  /api/v1/projects
+GET   /api/v1/projects/:id
+PATCH /api/v1/projects/:id
+DELETE /api/v1/projects/:id
+
+GET   /api/v1/bugs
+POST  /api/v1/bugs
+GET   /api/v1/bugs/:id
+PATCH /api/v1/bugs/:id
+DELETE /api/v1/bugs/:id
+
+GET   /api/v1/comments
+POST  /api/v1/comments
+GET   /api/v1/comments/:id
+PATCH /api/v1/comments/:id
+DELETE /api/v1/comments/:id
+```
+
+---
+
+## Environment Variables
+
+### Client
+
+Local client `.env.local`:
+
+```env
+VITE_API_BASE_URL=http://localhost:3000/api/v1
+```
+
+Vercel production variable:
+
+```env
+VITE_API_BASE_URL=https://bug-board.onrender.com/api/v1
+```
+
+### Server
+
+Local server `.env`:
+
+```env
+NODE_ENV=development
+PORT=3000
+DB_LOCAL=mongodb://127.0.0.1:27017/bug-board
+DB_CLOUD=mongodb+srv://...
+JWT_SECRET=your_jwt_secret_here
+JWT_EXPIRES_IN=1d
+CLIENT_URL=http://localhost:5173
+```
+
+Render production variables:
+
+```env
+NODE_ENV=production
+DB_CLOUD=mongodb+srv://...
+JWT_SECRET=your_jwt_secret_here
+JWT_EXPIRES_IN=1d
+CLIENT_URL=https://bug-board-gilt.vercel.app
+```
+
+Do not commit real `.env` files.
+
+---
+
+## Deployment
+
+### Frontend
+
+The frontend is deployed on Vercel.
+
+```txt
+Frontend URL: https://bug-board-gilt.vercel.app
+Root Directory: client
+Framework Preset: Vite
+Build Command: pnpm build
+Output Directory: dist
+```
+
+The client uses a Vercel rewrite for React Router browser routes.
+
+```json
+{
+  "rewrites": [{ "source": "/(.*)", "destination": "/" }]
+}
+```
+
+### Backend
+
+The backend API is deployed on Render.
+
+```txt
+API URL: https://bug-board.onrender.com
+Root Directory: server
+Build Command: pnpm install && pnpm build
+Start Command: pnpm start
+```
+
+The production database uses MongoDB Atlas.
 
 ---
 
@@ -281,7 +432,8 @@ Authorization: Bearer <token>
 - Search and filtering
 - Resource ownership and authorization
 - Admin-only user management
-- Full frontend deployment
+- Improved frontend error handling
+- Full portfolio polish
 
 ---
 
@@ -307,3 +459,32 @@ Server provides identity and ownership.
 Authentication answers: Who are you?
 Authorization answers: What are you allowed to access?
 ```
+
+Frontend responsibilities:
+
+```txt
+Collect input.
+Render data.
+Navigate between pages.
+Send the token with protected requests.
+Handle loading, error, and empty states.
+```
+
+Backend responsibilities:
+
+```txt
+Authenticate users.
+Authorize resource access.
+Assign ownership.
+Validate requests.
+Protect data.
+```
+
+---
+
+## Related Documentation
+
+- [Client README](./client/README.md)
+- [Server README](./server/README.md)
+- [API Flow](./docs/api-flow.md)
+- [Error Handling Notes](./docs/error-handling.md)
