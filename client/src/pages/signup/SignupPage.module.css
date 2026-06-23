@@ -3,12 +3,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2rem;
+  padding: 1rem;
 }
 
 .authCard {
   width: min(100%, 30rem);
-  padding: 2rem;
+  padding: 1.25rem;
   border: 1px solid #d7dce3;
   border-radius: 1rem;
   background: #ffffff;
@@ -22,7 +22,7 @@
 
 .authHeader h1 {
   margin: 0;
-  font-size: 2rem;
+  font-size: clamp(1.65rem, 6vw, 2rem);
   line-height: 1.1;
   color: #0f172a;
 }
@@ -72,18 +72,28 @@
 
 .buttonGroup {
   display: flex;
+  flex-direction: column;
   gap: 0.75rem;
   margin-top: 0.5rem;
 }
 
 .primaryButton,
 .secondaryButton {
-  flex: 1;
+  display: inline-flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
   padding: 0.75rem 1rem;
   border-radius: 0.6rem;
   font: inherit;
   font-weight: 700;
   cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease,
+    opacity 0.15s ease;
 }
 
 .primaryButton {
@@ -92,7 +102,7 @@
   color: #ffffff;
 }
 
-.primaryButton:hover {
+.primaryButton:hover:not(:disabled) {
   background: #1d4ed8;
 }
 
@@ -102,8 +112,23 @@
   color: #334155;
 }
 
-.secondaryButton:hover {
+.secondaryButton:hover:not(:disabled) {
   background: #f8fafc;
+}
+
+.primaryButton:disabled,
+.secondaryButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.spinner {
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid rgba(255, 255, 255, 0.45);
+  border-top-color: #ffffff;
+  border-radius: 999px;
+  animation: spin 0.7s linear infinite;
 }
 
 .errorMessage,
@@ -127,4 +152,26 @@
 
 .errorList p {
   margin: 0;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (min-width: 480px) {
+  .buttonGroup {
+    flex-direction: row;
+  }
+}
+
+@media (min-width: 640px) {
+  .authPage {
+    padding: 2rem;
+  }
+
+  .authCard {
+    padding: 2rem;
+  }
 }
