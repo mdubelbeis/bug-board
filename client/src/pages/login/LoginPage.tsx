@@ -4,10 +4,16 @@ import styles from './LoginPage.module.css';
 
 const LoginPage = () => {
   const [errors, setErrors] = useState<{ title: string; message: string } | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const navigate = useNavigate();
 
-  async function handleLogin(e: React.SubmitEvent<HTMLFormElement>) {
+  async function handleLogin(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+
+    if (isSubmitting) return;
+
+    setIsSubmitting(true);
     setErrors(null);
 
     const form = new FormData(e.currentTarget);
@@ -33,14 +39,14 @@ const LoginPage = () => {
         throw new Error(data.message);
       }
 
-      if (data) {
-        localStorage.setItem('token', data.token);
-        navigate('/dashboard');
-      }
+      localStorage.setItem('token', data.token);
+      navigate('/dashboard');
     } catch (err) {
       if (err instanceof Error) {
         setErrors({ title: 'Failure to login. ', message: err.message });
       }
+    } finally {
+      setIsSubmitting(false);
     }
   }
 
@@ -63,6 +69,7 @@ const LoginPage = () => {
               placeholder='demo@bugboard.dev'
               defaultValue='demo@bugboard.dev'
               required
+              disabled={isSubmitting}
             />
           </div>
 
@@ -75,6 +82,7 @@ const LoginPage = () => {
               placeholder='password123'
               defaultValue='password123'
               required
+              disabled={isSubmitting}
             />
           </div>
 
@@ -85,8 +93,20 @@ const LoginPage = () => {
             </div>
           )}
 
-          <button className={styles.primaryButton} type='submit'>
-            Log in
+          <button
+            className={styles.primaryButton}
+            type='submit'
+            disabled={isSubmitting}
+            aria-busy={isSubmitting}
+          >
+            {isSubmitting ? (
+              <>
+                <span className={styles.spinner} aria-hidden='true' />
+                Logging in...
+              </>
+            ) : (
+              'Log in'
+            )}
           </button>
         </form>
       </div>

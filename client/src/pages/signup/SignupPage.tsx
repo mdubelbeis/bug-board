@@ -11,10 +11,15 @@ const SignupPage = () => {
     }[]
   >([]);
   const [errors, setErrors] = useState<{ title: string; message: string } | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
 
-  async function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+
+    if (isSubmitting) return;
+
+    setIsSubmitting(true);
     setFieldErrors([]);
     setErrors(null);
 
@@ -49,14 +54,14 @@ const SignupPage = () => {
         throw new Error(data.message);
       }
 
-      if (data) {
-        localStorage.setItem('token', data.token);
-        navigate('/dashboard');
-      }
+      localStorage.setItem('token', data.token);
+      navigate('/dashboard');
     } catch (err) {
       if (err instanceof Error) {
         setErrors({ title: 'Failure to Signup. ', message: err.message });
       }
+    } finally {
+      setIsSubmitting(false);
     }
   }
 
@@ -117,11 +122,24 @@ const SignupPage = () => {
           )}
 
           <div className={styles.buttonGroup}>
-            <button className={styles.secondaryButton} type='reset'>
+            <button className={styles.secondaryButton} type='reset' disabled={isSubmitting}>
               Reset
             </button>
-            <button className={styles.primaryButton} type='submit'>
-              Sign up
+
+            <button
+              className={styles.primaryButton}
+              type='submit'
+              disabled={isSubmitting}
+              aria-busy={isSubmitting}
+            >
+              {isSubmitting ? (
+                <>
+                  <span className={styles.spinner} aria-hidden='true' />
+                  Creating account...
+                </>
+              ) : (
+                'Sign up'
+              )}
             </button>
           </div>
         </form>
