@@ -1,5 +1,5 @@
 import { Link, useLoaderData } from 'react-router-dom';
-import type { ProjectData, ProjectDetailPageData } from '../../types/project.ts';
+import type { ProjectDetailPageData } from '../../types/project.ts';
 import styles from './ProjectDetailPage.module.css';
 
 // TODO Project Bug Summary
@@ -20,7 +20,6 @@ const ProjectDetailPage = () => {
 
   const totalBugs = bugs.length;
   const openBugs = bugs.filter((bug) => bug.status === 'OPEN').length;
-  const resolvedBugs = bugs.filter((bug) => bug.status === 'RESOLVED').length;
   const highCriticalBugs = bugs.filter(
     (bug) => bug.priority === 'HIGH' || bug.priority === 'CRITICAL'
   ).length;
