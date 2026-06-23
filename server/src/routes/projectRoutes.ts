@@ -6,6 +6,7 @@ import {
   getAllProjects,
   updateProject,
 } from '../controllers/projectController.js';
+import { getProjectBugs } from '../controllers/bugController.js';
 
 const router: Router = express.Router();
 
@@ -15,5 +16,5 @@ router
   .get(findProject)
   .delete(deleteProject)
   .patch(updateProject);
-
+router.route('/:projectId/bugs').get(getProjectBugs);
 export default router;

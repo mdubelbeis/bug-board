@@ -1,7 +1,7 @@
 import { createBrowserRouter, redirect, RouterProvider } from 'react-router-dom';
 
 import { getCurrentUser } from './api/auth.ts';
-import { getBugData, getBugsData } from './api/bugs.ts';
+import { getBugData, getBugsData, getProjectBugsData } from './api/bugs.ts';
 import { getProjectData, getProjectsData } from './api/projects.ts';
 import AccountPage from './pages/account/AccountPage.tsx';
 import BugDetailPage from './pages/bugs/BugDetailPage.tsx';
@@ -98,6 +98,7 @@ const router = createBrowserRouter([
             loader: async ({ params }) => {
               const token = localStorage.getItem('token');
               const { projectId } = params;
+
               if (!token) {
                 return redirect('/login');
               }
@@ -106,9 +107,15 @@ const router = createBrowserRouter([
                 throw new Error('Project ID is required');
               }
 
-              const projectsData = await getProjectData(token, projectId);
+              const [projectsData, bugData] = await Promise.all([
+                getProjectData(token, projectId),
+                getProjectBugsData(token, projectId),
+              ]);
 
-              return projectsData.data.project;
+              return {
+                project: projectsData.data.project,
+                bugs: bugData.data.bugs,
+              };
             },
           },
           {

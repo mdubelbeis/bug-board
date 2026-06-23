@@ -1,5 +1,5 @@
 import { Link, useLoaderData } from 'react-router-dom';
-import type { ProjectData } from '../../types/project.ts';
+import type { ProjectDetailPageData } from '../../types/project.ts';
 import styles from './ProjectDetailPage.module.css';
 
 // TODO Project Bug Summary
@@ -16,7 +16,13 @@ import styles from './ProjectDetailPage.module.css';
 // TODO Delete project button
 
 const ProjectDetailPage = () => {
-  const project = useLoaderData() as ProjectData;
+  const { project, bugs } = useLoaderData() as ProjectDetailPageData;
+
+  const totalBugs = bugs.length;
+  const openBugs = bugs.filter((bug) => bug.status === 'OPEN').length;
+  const highCriticalBugs = bugs.filter(
+    (bug) => bug.priority === 'HIGH' || bug.priority === 'CRITICAL'
+  ).length;
 
   return (
     <section className={styles.projectDetailPage}>
@@ -65,17 +71,17 @@ const ProjectDetailPage = () => {
           <div className={styles.summaryGrid}>
             <div>
               <span>Total Bugs</span>
-              <strong>0</strong>
+              <strong>{totalBugs}</strong>
             </div>
 
             <div>
               <span>Open Bugs</span>
-              <strong>0</strong>
+              <strong>{openBugs}</strong>
             </div>
 
             <div>
               <span>High/Critical</span>
-              <strong>0</strong>
+              <strong>{highCriticalBugs}</strong>
             </div>
           </div>
         </article>
@@ -85,19 +91,36 @@ const ProjectDetailPage = () => {
         <div className={styles.panelHeader}>
           <div>
             <h2>Project Bugs</h2>
-            <p>Bugs connected to this project will appear here.</p>
+            <p>Bugs connected to this project.</p>
           </div>
 
           <Link to={`/projects/${project._id}/bugs/new`}>Add Bug</Link>
         </div>
 
-        <div className={styles.emptyState}>
-          <h3>No bugs loaded yet</h3>
-          <p>
-            Once this page loader returns bugs for the project, this section can become a bug list
-            or table.
-          </p>
-        </div>
+        {bugs.length === 0 ? (
+          <div className={styles.emptyState}>
+            <h3>No bugs yet</h3>
+            <p>Create the first bug for this project to start tracking issues.</p>
+          </div>
+        ) : (
+          <div className={styles.bugList}>
+            {bugs.map((bug) => (
+              <Link key={bug._id} to={`/bugs/${bug._id}`} className={styles.bugCard}>
+                <div className={styles.bugCardHeader}>
+                  <h3>{bug.title}</h3>
+                  <span className={styles.statusBadge}>{bug.status.replace('_', ' ')}</span>
+                </div>
+
+                <p>{bug.description}</p>
+
+                <div className={styles.bugMeta}>
+                  <span>Priority: {bug.priority}</span>
+                  <span>Severity: {bug.severity}</span>
+                </div>
+              </Link>
+            ))}
+          </div>
+        )}
       </section>
 
       <section className={styles.dangerZone}>
