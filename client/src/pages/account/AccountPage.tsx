@@ -69,8 +69,12 @@ const AccountPage = () => {
         </div>
 
         <div className={styles.buttonGroup}>
-          <button type='button'>Edit Name</button>
-          <button type='button'>Edit Email</button>
+          <button type='button' disabled>
+            Edit Name
+          </button>
+          <button type='button' disabled>
+            Edit Email
+          </button>
         </div>
       </section>
 
@@ -81,7 +85,9 @@ const AccountPage = () => {
         </div>
 
         <div className={styles.buttonGroup}>
-          <button type='button'>Change Password</button>
+          <button type='button' disabled>
+            Change Password
+          </button>
         </div>
       </section>
     </section>

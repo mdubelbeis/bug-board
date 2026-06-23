@@ -2,19 +2,6 @@ import { Link, useLoaderData } from 'react-router-dom';
 import type { ProjectDetailPageData } from '../../types/project.ts';
 import styles from './ProjectDetailPage.module.css';
 
-// TODO Project Bug Summary
-//  - Total bugs
-//  - Open bugs
-//  - high/critical bugs
-// TODO Bugs for this project
-//  - list/table of bugs belonging to this project
-//  - status
-//  - priority
-//  - severity
-//  - updatedAt
-//  - link to /bugs/:bugId (shows bug comments)
-// TODO Delete project button
-
 const ProjectDetailPage = () => {
   const { project, bugs } = useLoaderData() as ProjectDetailPageData;
 

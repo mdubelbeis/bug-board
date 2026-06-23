@@ -139,6 +139,11 @@
   background: #f8fafc;
 }
 
+button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
 @media (min-width: 768px) {
   .detailsGrid {
     grid-template-columns: 0.8fr 1.2fr;

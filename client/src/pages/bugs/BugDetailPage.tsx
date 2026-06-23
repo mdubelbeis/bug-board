@@ -4,10 +4,6 @@ import styles from './BugDetailPage.module.css';
 import { useState } from 'react';
 import { updateBugStatus } from '../../api/bugs.ts';
 
-// TODO Project Context
-//  - Project title/name
-//  - link back to /projects/:projectId
-
 // TODO Comments
 //  - list of comments for this bug
 //  - comment body
