@@ -106,7 +106,9 @@ const ProjectDetailPage = () => {
           <p>Delete this project only when you are sure it is no longer needed.</p>
         </div>
 
-        <button type='button'>Delete Project</button>
+        <button disabled type='button'>
+          Delete Project
+        </button>
       </section>
     </section>
   );
