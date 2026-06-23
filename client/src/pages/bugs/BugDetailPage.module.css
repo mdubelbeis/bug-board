@@ -210,6 +210,53 @@
   line-height: 1.5;
 }
 
+.statusControl {
+  display: grid;
+  gap: 0.45rem;
+  margin-top: 1rem;
+}
+
+.statusControl label {
+  color: #334155;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.statusControl select {
+  width: 100%;
+  padding: 0.7rem 0.8rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.6rem;
+  background: #ffffff;
+  color: #0f172a;
+  font: inherit;
+  cursor: pointer;
+}
+
+.statusControl select:focus {
+  outline: 2px solid #93c5fd;
+  border-color: #2563eb;
+}
+
+.statusControl select:disabled {
+  cursor: not-allowed;
+  background: #f8fafc;
+  color: #64748b;
+}
+
+.statusNote {
+  margin: 0;
+  color: #64748b;
+  font-size: 0.85rem;
+}
+
+.statusError {
+  margin: 0;
+  color: #b91c1c;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
 @media (min-width: 768px) {
   .pageHeader {
     flex-direction: row;

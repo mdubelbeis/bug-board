@@ -1,4 +1,4 @@
-import type { CreateBugData } from '../types/bug.ts';
+import type { BugData, BugStatus, CreateBugData } from '../types/bug.ts';
 
 export async function getBugsData(token: string) {
   const bugsResponse = await fetch(`${import.meta.env.VITE_API_BASE_URL}/bugs`, {
@@ -51,4 +51,43 @@ export async function createBug(token: string, newBugData: CreateBugData) {
   }
 
   return bugData.data.bug;
+}
+
+export async function getProjectBugsData(token: string, projectId: string) {
+  const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/projects/${projectId}/bugs`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.message);
+  }
+
+  return data;
+}
+
+export async function updateBugStatus(
+  token: string,
+  bugId: string,
+  status: BugStatus
+): Promise<BugData> {
+  const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/bugs/${bugId}`, {
+    method: 'PATCH',
+    headers: {
+      'content-type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ status }),
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.message || 'Failed to update bug status');
+  }
+
+  return data.data.bug;
 }

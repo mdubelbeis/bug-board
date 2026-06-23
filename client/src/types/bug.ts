@@ -23,3 +23,5 @@ export interface CreateBugData {
   severity: string;
   project: string;
 }
+
+export type BugStatus = 'OPEN' | 'IN_PROGRESS' | 'RESOLVED' | 'CLOSED';

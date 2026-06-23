@@ -1,6 +1,8 @@
 import { Link, useLoaderData } from 'react-router-dom';
-import type { BugData } from '../../types/bug.ts';
+import type { BugData, BugStatus } from '../../types/bug.ts';
 import styles from './BugDetailPage.module.css';
+import { useState } from 'react';
+import { updateBugStatus } from '../../api/bugs.ts';
 
 // TODO Project Context
 //  - Project title/name
@@ -13,7 +15,37 @@ import styles from './BugDetailPage.module.css';
 //  - createdAt
 
 const BugDetailPage = () => {
-  const bug = useLoaderData() as BugData;
+  const loadedBug = useLoaderData() as BugData;
+
+  const [bug, setBug] = useState(loadedBug);
+  const [statusError, setStatusError] = useState<string | null>(null);
+  const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
+
+  const status = bug.status === 'IN_PROGRESS' ? 'IN PROGRESS' : bug.status;
+
+  async function handleStatusChange(e: React.ChangeEvent<HTMLSelectElement>) {
+    const newStatus = e.target.value as BugStatus;
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+      setStatusError('You must be logged in to update bug status.');
+      return;
+    }
+
+    setIsUpdatingStatus(true);
+    setStatusError(null);
+
+    try {
+      const updatedBug = await updateBugStatus(token, bug._id, newStatus);
+      setBug(updatedBug);
+    } catch (err) {
+      if (err instanceof Error) {
+        setStatusError(err.message);
+      }
+    } finally {
+      setIsUpdatingStatus(false);
+    }
+  }
 
   return (
     <section className={styles.bugDetailPage}>
@@ -40,26 +72,40 @@ const BugDetailPage = () => {
           <h2>Issue Status</h2>
 
           <div className={styles.badgeRow}>
-            <span className={styles.statusBadge}>{bug.status}</span>
+            <span className={styles.statusBadge}>{status}</span>
             <span className={styles.priorityBadge}>{bug.priority}</span>
             <span className={styles.severityBadge}>{bug.severity}</span>
           </div>
         </article>
 
         <article className={styles.detailsCard}>
-          <h2>Timeline</h2>
+          <h2>Issue Status</h2>
 
-          <dl className={styles.metaList}>
-            <div>
-              <dt>Created</dt>
-              <dd>{new Date(bug.createdAt).toLocaleString()}</dd>
-            </div>
+          <div className={styles.badgeRow}>
+            <span className={styles.statusBadge}>{bug.status.replace('_', ' ')}</span>
+            <span className={styles.priorityBadge}>{bug.priority}</span>
+            <span className={styles.severityBadge}>{bug.severity}</span>
+          </div>
 
-            <div>
-              <dt>Updated</dt>
-              <dd>{new Date(bug.updatedAt).toLocaleString()}</dd>
-            </div>
-          </dl>
+          <div className={styles.statusControl}>
+            <label htmlFor='status'>Update Status</label>
+
+            <select
+              id='status'
+              name='status'
+              value={bug.status}
+              onChange={handleStatusChange}
+              disabled={isUpdatingStatus}
+            >
+              <option value='OPEN'>Open</option>
+              <option value='IN_PROGRESS'>In Progress</option>
+              <option value='RESOLVED'>Resolved</option>
+              <option value='CLOSED'>Closed</option>
+            </select>
+
+            {isUpdatingStatus && <p className={styles.statusNote}>Updating status...</p>}
+            {statusError && <p className={styles.statusError}>{statusError}</p>}
+          </div>
         </article>
       </section>
 

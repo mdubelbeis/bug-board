@@ -150,3 +150,36 @@ export const deleteBug = async (
 
   res.status(204).send();
 };
+
+export const getProjectBugs = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  if (!req.user) {
+    return next(new AppError('You are not logged in', 401));
+  }
+
+  const { projectId } = req.params;
+
+  const project = await Project.findOne({
+    _id: projectId,
+    owner: req.user._id,
+  });
+
+  if (!project) {
+    return next(new AppError('Project not found', 404));
+  }
+
+  const bugs = await Bug.find({
+    project: project._id,
+  }).sort({ createdAt: -1 });
+
+  res.status(200).json({
+    status: 'success',
+    count: bugs.length,
+    data: {
+      bugs,
+    },
+  });
+};

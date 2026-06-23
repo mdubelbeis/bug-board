@@ -1,3 +1,5 @@
+import type { BugData } from './bug.ts';
+
 export interface ProjectData {
   createdAt: string;
   description: string;
@@ -6,9 +8,15 @@ export interface ProjectData {
   updatedAt: string;
   _id: string;
 }
+
 export interface ProjectsPageData {
   projects: ProjectData[];
   projectsCount: number;
+}
+
+export interface ProjectDetailPageData {
+  project: ProjectData;
+  bugs: BugData[];
 }
 
 export interface CreateProjectData {

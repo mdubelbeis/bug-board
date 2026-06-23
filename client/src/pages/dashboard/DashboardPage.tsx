@@ -6,7 +6,9 @@ const DashboardPage = () => {
   const data = useLoaderData() as DashboardData;
 
   const recentProjects = data.projects.slice(0, 4);
-  const recentBugs = data.bugs.slice(0, 5);
+  const recentBugs = data.bugs
+    .toSorted((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+    .slice(0, 5);
 
   return (
     <section className={styles.dashboard}>
